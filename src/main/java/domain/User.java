@@ -3,7 +3,7 @@ package domain;
 public class User {
     private String name;
     private String email;
-    private boolean status;
+    private boolean status = true;
     private String role;
 
     public User(String name, String email) {
