@@ -1,4 +1,5 @@
 import domain.Course;
+import domain.Role;
 import domain.User;
 import service.CourseService;
 import service.UserService;
@@ -27,24 +28,41 @@ public class Main {
             System.out.println(" ");
             switch (option){
                 case 1:
+                    System.out.println("What type of user you want to register?");
+                    System.out.println("1. Student");
+                    System.out.println("2. Instructor");
+                    System.out.print("Choose an option: ");
+                    String typeOfUser = scanner.nextLine();
+                    Role role = null;
+                    while (role == null){
+                        if (typeOfUser.equals("1")){
+                            role = Role.STUDENT;
+                        } else if (typeOfUser.equals("2")){
+                            role = Role.INSTRUCTOR;
+                        } else {
+                            System.out.println("Enter a valid type of user.");
+                            typeOfUser = scanner.nextLine();
+                        }
+                    }
+
                     System.out.print("Enter a name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter an email: ");
                     String email = scanner.nextLine();
-                    User user = new User(name, email);
+                    User user = new User(name, email, role);
                     userService.registerUser(user);
                     System.out.println(" ");
                     break;
                 case 2:
                     System.out.println("-------------- User list --------------");
                     for (User u : userService.listUsers()) {
-                        System.out.println("Name: " + u.getName() + ", Email:" + u.getEmail());
+                        System.out.println("Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
                     }
                     System.out.println("---------------------------------------");
                     System.out.println(" ");
                     break;
                 case 3:
-                    System.out.print("Enter course name: ");
+                    System.out.print("\nEnter course name: ");
                     String courseName = scanner.nextLine();
                     System.out.print("Enter a description: ");
                     String description = scanner.nextLine();
@@ -60,6 +78,8 @@ public class Main {
                     System.out.println("---------------------------------------");
                     System.out.println(" ");
                     break;
+                default:
+                    System.out.println("Invalid option...\n");
             }
 
         } while (option != 0);

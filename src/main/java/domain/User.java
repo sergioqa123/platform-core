@@ -4,18 +4,19 @@ public class User {
     private String name;
     private String email;
     private boolean status = true;
-    private String role;
+    private Role role;
 
-    public User(String name, String email) {
+    public User(String name, String email, Role role) {
         this.name = name;
         this.email = email;
+        this.role = role;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -32,6 +33,6 @@ public class User {
     }
 
     public String getRole() {
-        return role;
+        return role.name();
     }
 }
