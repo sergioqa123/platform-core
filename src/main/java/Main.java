@@ -1,4 +1,6 @@
+import domain.Course;
 import domain.User;
+import service.CourseService;
 import service.UserService;
 
 import java.util.Scanner;
@@ -9,13 +11,17 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         UserService userService = new UserService();
+        CourseService courseService = new CourseService();
 
         do {
-            System.out.println("======= Welcome ======");
-            System.out.println("| 1. Register user   |");
-            System.out.println("| 2. List users      |");
-            System.out.println("| 3. Exit            |");
-            System.out.println("======================");
+            System.out.println("=========== Welcome! ==========");
+            System.out.println("| 1. Register user            |");
+            System.out.println("| 2. List users               |");
+            System.out.println("| 3. Register course          |");
+            System.out.println("| 4. List courses             |");
+            System.out.println("| 5. Assign course instructor |");
+            System.out.println("| 0. Exit                     |");
+            System.out.println("===============================");
             System.out.print("Choose an option: ");
             option = Integer.parseInt(scanner.nextLine());
             System.out.println(" ");
@@ -23,7 +29,7 @@ public class Main {
                 case 1:
                     System.out.print("Enter a name: ");
                     String name = scanner.nextLine();
-                    System.out.print("Enter an email address: ");
+                    System.out.print("Enter an email: ");
                     String email = scanner.nextLine();
                     User user = new User(name, email);
                     userService.registerUser(user);
@@ -37,9 +43,26 @@ public class Main {
                     System.out.println("---------------------------------------");
                     System.out.println(" ");
                     break;
+                case 3:
+                    System.out.print("Enter course name: ");
+                    String courseName = scanner.nextLine();
+                    System.out.print("Enter a description: ");
+                    String description = scanner.nextLine();
+                    Course course = new Course(courseName, description);
+                    courseService.registerCourse(course);
+                    System.out.println(" ");
+                    break;
+                case 4:
+                    System.out.println("-------------- Course list --------------");
+                    for (Course c : courseService.listCourses()) {
+                        System.out.println("Course: " + c.getName() + ", Description:" + c.getDescription());
+                    }
+                    System.out.println("---------------------------------------");
+                    System.out.println(" ");
+                    break;
             }
 
-        } while (option != 3);
+        } while (option != 0);
 
         scanner.close();
     }
