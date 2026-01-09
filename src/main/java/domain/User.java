@@ -27,7 +27,7 @@ public class User {
         return email;
     }
 
-    public boolean isStatus() {
+    public boolean isActive() {
         return status;
     }
 
