@@ -41,25 +41,17 @@ public class Main {
                     System.out.println("1. Student");
                     System.out.println("2. Instructor");
                     System.out.print("Choose an option: ");
-                    String typeOfUser = scanner.nextLine();
-                    Role role = null;
-                    while (role == null){
-                        if (typeOfUser.equals("1")){
-                            role = Role.STUDENT;
-                        } else if (typeOfUser.equals("2")){
-                            role = Role.INSTRUCTOR;
-                        } else {
-                            System.out.print("Enter a valid type of user: ");
-                            typeOfUser = scanner.nextLine();
-                        }
+                    String roleInput = scanner.nextLine();
+                    while(!userService.isValidRole(roleInput)){
+                        System.out.print("Enter a valid type of user: ");
+                        roleInput = scanner.nextLine();
                     }
                     System.out.print("Enter a name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter an email: ");
                     String email = scanner.nextLine();
-
-                    User user = new User(name, email, role);
-                    userService.registerUser(user);
+                    userService.registerUser(name, email, roleInput);
+                    System.out.println("User registered successfully!");
                     System.out.println(" ");
                     break;
                 case 2:
@@ -109,6 +101,7 @@ public class Main {
         int courseOption = 0; // course id
         int userOption = 0; // user id
         boolean fOption = false; // flag to stop loop
+        boolean fInstructor = false;
         Scanner scanner = new Scanner(System.in);
         ArrayList<Course> coursesWithoutInstructor = new ArrayList<>();
         ArrayList<User> instructors = new ArrayList<>();
@@ -133,7 +126,7 @@ public class Main {
             }
             System.out.println("---------------------------------------------");
 
-            System.out.print("Select an ID course: ");
+            System.out.print("Select a course ID: ");
             courseOption = Integer.parseInt(scanner.nextLine());
 
             // verify course id
@@ -151,6 +144,32 @@ public class Main {
         } while (!fOption);
 
         //User logic
+        do {
+            System.out.println("------------- Available instructors -------------");
+            for (User u : instructors){
+                System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
+            }
+            System.out.println("---------------------------------------------");
+
+            System.out.print("Select an instructor ID: ");
+            userOption = Integer.parseInt(scanner.nextLine());
+
+            // verify instructor id
+            for (User u : instructors){
+                if(userOption == u.getId()){
+                    System.out.println("Selected instructor: " + u.getName());
+                    fInstructor = true;
+                    break;
+                }
+            }
+            if (!fInstructor){
+                System.out.println("Invalid instructor ID...\n");
+            }
+
+        } while (!fInstructor);
+
+        // assignment
+        //courseService.assignInstructor(, userOption);
     }
 
 }
