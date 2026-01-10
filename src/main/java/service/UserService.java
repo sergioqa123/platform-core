@@ -17,6 +17,17 @@ public class UserService {
         return roleInput.equals("1") || roleInput.equals("2");
     }
 
+    public boolean isValidInstructorID(String userOption){
+        for (User u : listUsersByRole(Role.INSTRUCTOR)){
+            if (Integer.parseInt(userOption) == u.getId()){
+                System.out.println("Selected user: " + u.getName());
+                return true;
+            }
+        }
+        System.out.println("Invalid instructor ID...");
+        return false;
+    }
+
     public void registerUser(String name, String email, String roleInput){
         Role role = null;
         if (roleInput.equals("1")){

@@ -29,9 +29,9 @@ public class CourseService {
         return true;
     }
 
-    public boolean isValidAvailableCourseID(int courseOption) {
+    public boolean isValidAvailableCourseID(String courseOption) {
         for (Course c : getAvailableCourses()) {
-            if (courseOption == c.getId()) {
+            if (Integer.parseInt(courseOption) == c.getId()) {
                 System.out.println("Selected course: " + c.getName());
                 return true;
             }

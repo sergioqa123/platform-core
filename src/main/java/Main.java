@@ -92,24 +92,27 @@ public class Main {
                     // to do: return to menu if course list is empty
                     System.out.println("------------- Available courses -------------");
                     for (Course c : courseService.getAvailableCourses()){
-                        System.out.println("ID: " + c.getId() + ", Name: " + c.getName() + ", Description: " + c.getDescription());
+                        System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
                     }
                     System.out.println("---------------------------------------------");
                     System.out.print("Select a course ID: ");
-                    int courseOption = Integer.parseInt(scanner.nextLine());
+                    String courseOption = scanner.nextLine();
                     while(!courseService.isValidAvailableCourseID(courseOption)){
                         System.out.print("Select a valid course ID: ");
-                        courseOption = Integer.parseInt(scanner.nextLine());
+                        courseOption = scanner.nextLine();
                     }
 
                     System.out.println("------------- Available instructors -------------");
                     for (User u : userService.listUsersByRole(Role.INSTRUCTOR)) {
                         System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
                     }
-                    System.out.println("---------------------------------------------");
-
+                    System.out.println("-------------------------------------------------");
                     System.out.print("Select an instructor ID: ");
-                    int userOption = Integer.parseInt(scanner.nextLine());
+                    String userOption = scanner.nextLine();
+                    while(!userService.isValidInstructorID(userOption)){
+                        System.out.print("Select a valid instructor ID: ");
+                        userOption = scanner.nextLine();
+                    }
                     // courseService.assignInstructorToCourse(courseService, userService);
                     break;
                 default:
@@ -120,11 +123,5 @@ public class Main {
 
         scanner.close();
     }
-
-
-
-        // assignment
-        //courseService.assignInstructor(, userOption);
-
 
 }
