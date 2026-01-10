@@ -19,6 +19,16 @@ public class CourseService {
         courseRepository.saveCourse(course);
     }
 
+    public boolean isValidName(String courseName) {
+        for(Course c : courseRepository.getCourses()){
+            if(courseName.equals(c.getName())) {
+                System.out.println("Course already exists.");
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean assignInstructor(Course course, User instructor){
         if(instructor.getRole() == Role.INSTRUCTOR){
             course.setInstructor(instructor);

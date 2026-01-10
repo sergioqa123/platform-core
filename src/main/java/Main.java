@@ -36,7 +36,7 @@ public class Main {
                 case 0:
                     System.out.println("Goodbye!");
                     break;
-                case 1:
+                case 1: // Register user
                     System.out.println("What type of user you want to register?");
                     System.out.println("1. Student");
                     System.out.println("2. Instructor");
@@ -54,7 +54,7 @@ public class Main {
                     System.out.println("User registered successfully!");
                     System.out.println(" ");
                     break;
-                case 2:
+                case 2: // List users
                     System.out.println("------------------- User list -------------------");
                     for (User u : userService.listUsers()) {
                         System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
@@ -62,16 +62,20 @@ public class Main {
                     System.out.println("-------------------------------------------------");
                     System.out.println(" ");
                     break;
-                case 3:
+                case 3: // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
+                    while(!courseService.isValidName(courseName)){
+                        System.out.print("Enter a new course name: ");
+                        courseName = scanner.nextLine();
+                    }
                     System.out.print("Enter a description: ");
                     String description = scanner.nextLine();
                     Course course = new Course(courseName, description);
                     courseService.registerCourse(course);
                     System.out.println(" ");
                     break;
-                case 4:
+                case 4: // List courses
                     System.out.println("-------------- Course list --------------");
                     for (Course c : courseService.listCourses()) {
                         System.out.print("Course: " + c.getName() + ", Description: " + c.getDescription()  + ", Instructor: ");
@@ -84,7 +88,7 @@ public class Main {
                     System.out.println("---------------------------------------");
                     System.out.println(" ");
                     break;
-                case 5:
+                case 5: // Assign course instructor
                     // to do: return to menu if course list is empty
                     assignInstructorToCourse(courseService, userService);
                     break;
