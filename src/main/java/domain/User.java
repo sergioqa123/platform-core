@@ -1,6 +1,7 @@
 package domain;
 
 public class User {
+    private int id;
     private String name;
     private String email;
     private boolean status = true;
@@ -34,5 +35,13 @@ public class User {
 
     public String getRole() {
         return role.name();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -1,6 +1,7 @@
 package domain;
 
 public class Course {
+    private int id;
     private String name;
     private String description;
     private User instructor;

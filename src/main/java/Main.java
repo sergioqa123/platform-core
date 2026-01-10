@@ -64,7 +64,7 @@ public class Main {
                 case 2:
                     System.out.println("------------------- User list -------------------");
                     for (User u : userService.listUsers()) {
-                        System.out.println("Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
+                        System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
                     }
                     System.out.println("-------------------------------------------------");
                     System.out.println(" ");

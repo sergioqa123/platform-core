@@ -7,8 +7,11 @@ import java.util.ArrayList;
 public class UserRepository {
 
     private ArrayList<User> userList = new ArrayList<>();
+    private int userId = 1;
 
     public void saveUser(User user){
+        user.setId(userId);
+        userId++;
         this.userList.add(user);
     }
 
