@@ -4,7 +4,7 @@ public class Course {
     private int id;
     private String name;
     private String description;
-    private User instructor;
+    private User instructor; // Only one instructor per course
     private boolean status;
 
     public Course(String name, String description) {
@@ -42,5 +42,13 @@ public class Course {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -33,8 +33,8 @@ public class User {
         return status;
     }
 
-    public String getRole() {
-        return role.name();
+    public Role getRole() {
+        return role;
     }
 
     public void setId(int id) {
