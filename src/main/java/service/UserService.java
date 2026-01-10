@@ -33,4 +33,14 @@ public class UserService {
         return userRepository.getUsers();
     }
 
+    public ArrayList<User> listUsersByRole(Role role){
+        ArrayList<User> usersWithRole = new ArrayList<>();
+        for (User u : listUsers()) {
+            if (u.getRole() == role) {
+                usersWithRole.add(u);
+            }
+        }
+        return usersWithRole;
+    }
+
 }

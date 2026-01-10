@@ -29,13 +29,56 @@ public class CourseService {
         return true;
     }
 
-    public boolean assignInstructor(Course course, User instructor){
+    public boolean isValidAvailableCourseID(int courseOption) {
+        for (Course c : getAvailableCourses()) {
+            if (courseOption == c.getId()) {
+                System.out.println("Selected course: " + c.getName());
+                return true;
+            }
+        }
+        System.out.println("Invalid course ID...");
+        return false;
+    }
+
+
+    public boolean assignInstructorToCourse(Course course, User instructor){
         if(instructor.getRole() == Role.INSTRUCTOR){
             course.setInstructor(instructor);
             course.setStatus(true); // course is now available
             return true; // successful assignment
         }
         return false;
+    }
+
+    public ArrayList<Course> getAvailableCourses (){
+        ArrayList<Course> availableCourses = new ArrayList<>(); // "available" meaning there's no instructor
+        for (Course c : this.listCourses()) {
+            if (c.getInstructor() == null) {
+                availableCourses.add(c);
+            }
+        }
+        return availableCourses;
+    }
+
+    public void assignInstructorToCourse(CourseService courseService, UserService userService) {
+
+//        //User logic
+//        do {
+//
+//
+//            // verify instructor id
+//            for (User u : instructors) {
+//                if (userOption == u.getId()) {
+//                    System.out.println("Selected instructor: " + u.getName());
+//                    fInstructor = true;
+//                    break;
+//                }
+//            }
+//            if (!fInstructor) {
+//                System.out.println("Invalid instructor ID...\n");
+//            }
+//
+//        } while (!fInstructor);
     }
 
     public ArrayList<Course> listCourses(){

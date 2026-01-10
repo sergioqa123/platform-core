@@ -90,7 +90,27 @@ public class Main {
                     break;
                 case 5: // Assign course instructor
                     // to do: return to menu if course list is empty
-                    assignInstructorToCourse(courseService, userService);
+                    System.out.println("------------- Available courses -------------");
+                    for (Course c : courseService.getAvailableCourses()){
+                        System.out.println("ID: " + c.getId() + ", Name: " + c.getName() + ", Description: " + c.getDescription());
+                    }
+                    System.out.println("---------------------------------------------");
+                    System.out.print("Select a course ID: ");
+                    int courseOption = Integer.parseInt(scanner.nextLine());
+                    while(!courseService.isValidAvailableCourseID(courseOption)){
+                        System.out.print("Select a valid course ID: ");
+                        courseOption = Integer.parseInt(scanner.nextLine());
+                    }
+
+                    System.out.println("------------- Available instructors -------------");
+                    for (User u : userService.listUsersByRole(Role.INSTRUCTOR)) {
+                        System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
+                    }
+                    System.out.println("---------------------------------------------");
+
+                    System.out.print("Select an instructor ID: ");
+                    int userOption = Integer.parseInt(scanner.nextLine());
+                    // courseService.assignInstructorToCourse(courseService, userService);
                     break;
                 default:
                     System.out.println("Invalid option...\n");
@@ -101,79 +121,10 @@ public class Main {
         scanner.close();
     }
 
-    public static void assignInstructorToCourse(CourseService courseService, UserService userService){
-        int courseOption = 0; // course id
-        int userOption = 0; // user id
-        boolean fOption = false; // flag to stop loop
-        boolean fInstructor = false;
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Course> coursesWithoutInstructor = new ArrayList<>();
-        ArrayList<User> instructors = new ArrayList<>();
 
-        for (Course c : courseService.listCourses()){
-            if(c.getInstructor() == null){
-                coursesWithoutInstructor.add(c);
-            }
-        }
-
-        for (User u : userService.listUsers()){
-            if(u.getRole() == Role.INSTRUCTOR){
-                instructors.add(u);
-            }
-        }
-
-        // Course logic
-        do {
-            System.out.println("------------- Available courses -------------");
-            for (Course c : coursesWithoutInstructor){
-                System.out.println("ID: " + c.getId() + ", Name: " + c.getName() + ", Description: " + c.getDescription());
-            }
-            System.out.println("---------------------------------------------");
-
-            System.out.print("Select a course ID: ");
-            courseOption = Integer.parseInt(scanner.nextLine());
-
-            // verify course id
-            for (Course c : coursesWithoutInstructor){
-                if(courseOption == c.getId()){
-                    System.out.println("Selected course: " + c.getName());
-                    fOption = true;
-                    break;
-                }
-            }
-            if (!fOption){
-                System.out.println("Invalid course ID...\n");
-            }
-
-        } while (!fOption);
-
-        //User logic
-        do {
-            System.out.println("------------- Available instructors -------------");
-            for (User u : instructors){
-                System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
-            }
-            System.out.println("---------------------------------------------");
-
-            System.out.print("Select an instructor ID: ");
-            userOption = Integer.parseInt(scanner.nextLine());
-
-            // verify instructor id
-            for (User u : instructors){
-                if(userOption == u.getId()){
-                    System.out.println("Selected instructor: " + u.getName());
-                    fInstructor = true;
-                    break;
-                }
-            }
-            if (!fInstructor){
-                System.out.println("Invalid instructor ID...\n");
-            }
-
-        } while (!fInstructor);
 
         // assignment
         //courseService.assignInstructor(, userOption);
-    }
+
 
 }
