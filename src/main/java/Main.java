@@ -56,7 +56,7 @@ public class Main {
                     break;
                 case 2: // List users
                     System.out.println("------------------- User list -------------------");
-                    for (User u : userService.listUsers()) {
+                    for (User u : userService.getAllUsers()) {
                         System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
                     }
                     System.out.println("-------------------------------------------------");
@@ -97,17 +97,17 @@ public class Main {
                     }
                     System.out.println("---------------------------------------------");
                     Course selectedCourse = null;
-                    int courseOption;
+                    int courseId;
 
                     while (selectedCourse == null) {
                         System.out.print("Select a course ID: ");
                         try {
-                            courseOption = Integer.parseInt(scanner.nextLine());
+                            courseId = Integer.parseInt(scanner.nextLine());
                         } catch (NumberFormatException e) {
-                            System.out.print("Enter a number");
+                            System.out.print("Enter a number.");
                             continue;
                         }
-                        selectedCourse = courseService.getAvailableCourseById(courseOption);
+                        selectedCourse = courseService.getAvailableCourseById(courseId);
 
                         if (selectedCourse == null){
                             System.out.println("Select a valid course ID.");
@@ -115,15 +115,25 @@ public class Main {
                     }
 
                     System.out.println("------------- Available instructors -------------");
-                    for (User u : userService.listUsersByRole(Role.INSTRUCTOR)) {
+                    for (User u : userService.getAllUsersByRole(Role.INSTRUCTOR)) {
                         System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
                     }
                     System.out.println("-------------------------------------------------");
-                    System.out.print("Select an instructor ID: ");
-                    String userOption = scanner.nextLine();
-                    while(!userService.isValidInstructorID(userOption)){
-                        System.out.print("Select a valid instructor ID: ");
-                        userOption = scanner.nextLine();
+                    User selectedInstructor = null;
+                    int userId;
+
+                    while(selectedInstructor == null){
+                        System.out.print("Select an instructor ID: ");
+                        try {
+                            userId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Enter a number.");
+                        }
+                        selectedInstructor = userService.getInstructorById(userId);
+
+                        if (selectedInstructor == null){
+                            System.out.println("Select a valid instructor ID.");
+                        }
                     }
                     // courseService.assignInstructorToCourse(courseService, userService);
                     break;

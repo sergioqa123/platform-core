@@ -18,10 +18,33 @@ public class UserService {
         return roleInput.equals("1") || roleInput.equals("2");
     }
 
-    public boolean isValidInstructorID(String userOption){
+    public ArrayList<User> getAllUsers(){
+        return userRepository.getUsers();
+    }
+
+    public ArrayList<User> getAllUsersByRole(Role role){
+        ArrayList<User> usersWithRole = new ArrayList<>();
+        for (User u : getAllUsers()) {
+            if (u.getRole() == role) {
+                usersWithRole.add(u);
+            }
+        }
+        return usersWithRole;
+    }
+
+    public User getInstructorById(int instructorId){
+        for (User i : getAllUsersByRole(Role.INSTRUCTOR)){
+            if (i.getId() == instructorId){
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public boolean isValidInstructorId(String userOption){ //!!!!!!!!!
         for (User u : listUsersByRole(Role.INSTRUCTOR)){
             if (Integer.parseInt(userOption) == u.getId()){
-                System.out.println("Selected user: " + u.getName());
+                System.out.println("Selected user: " + u.getName()); //move this to main
                 return true;
             }
         }
@@ -41,18 +64,6 @@ public class UserService {
         userRepository.saveUser(user);
     }
 
-    public ArrayList<User> listUsers(){
-        return userRepository.getUsers();
-    }
 
-    public ArrayList<User> listUsersByRole(Role role){
-        ArrayList<User> usersWithRole = new ArrayList<>();
-        for (User u : listUsers()) {
-            if (u.getRole() == role) {
-                usersWithRole.add(u);
-            }
-        }
-        return usersWithRole;
-    }
 
 }

@@ -31,11 +31,11 @@ public class CourseService {
         return courseRepository.getCourses();
     }
 
-    // "Available" = No instructor
+    // "Available" = no active
     public ArrayList<Course> getAvailableCourses (){
         ArrayList<Course> availableCourses = new ArrayList<>();
         for (Course c : this.getAllCourses()) {
-            if (c.getInstructor() == null) {
+            if (!c.isActive()) {
                 availableCourses.add(c);
             }
         }
@@ -44,7 +44,7 @@ public class CourseService {
 
     public Course getAvailableCourseById(int courseId){
         for(Course c : getAvailableCourses()){
-            if(courseId == c.getId()){
+            if(c.getId() == courseId){
                 return c;
             }
         }
