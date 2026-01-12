@@ -56,7 +56,7 @@ public class Main {
                     break;
                 case 2: // List users
                     System.out.println("------------------- User list -------------------");
-                    for (User u : userService.listUsers()) {
+                    for (User u : userService.getAllUsers()) {
                         System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
                     }
                     System.out.println("-------------------------------------------------");
@@ -65,7 +65,8 @@ public class Main {
                 case 3: // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
-                    while(!courseService.isValidCourseName(courseName)){
+                    while(!courseService.alreadyExists(courseName)){
+                        System.out.println("Course already exists.");
                         System.out.print("Enter a new course name: ");
                         courseName = scanner.nextLine();
                     }
@@ -77,7 +78,7 @@ public class Main {
                     break;
                 case 4: // List courses
                     System.out.println("-------------- Course list --------------");
-                    for (Course c : courseService.listCourses()) {
+                    for (Course c : courseService.getAllCourses()) {
                         System.out.print("Course: " + c.getName() + ", Description: " + c.getDescription()  + ", Instructor: ");
                         if (c.getInstructor() == null){
                             System.out.println("Not assigned");
@@ -89,29 +90,50 @@ public class Main {
                     System.out.println(" ");
                     break;
                 case 5: // Assign course instructor
-                    // to do: return to menu if course list is empty
+                    // to do: return to menu if course list is empty (same for instructors)
                     System.out.println("------------- Available courses -------------");
                     for (Course c : courseService.getAvailableCourses()){
                         System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
                     }
                     System.out.println("---------------------------------------------");
-                    System.out.print("Select a course ID: ");
-                    String courseOption = scanner.nextLine();
-                    while(!courseService.isValidAvailableCourseId(courseOption)){
-                        System.out.print("Select a valid course ID: ");
-                        courseOption = scanner.nextLine();
+                    Course selectedCourse = null;
+                    int courseId;
+
+                    while (selectedCourse == null) {
+                        System.out.print("Select a course ID: ");
+                        try {
+                            courseId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.print("Enter a number.");
+                            continue;
+                        }
+                        selectedCourse = courseService.getAvailableCourseById(courseId);
+
+                        if (selectedCourse == null){
+                            System.out.println("Select a valid course ID.");
+                        }
                     }
 
                     System.out.println("------------- Available instructors -------------");
-                    for (User u : userService.listUsersByRole(Role.INSTRUCTOR)) {
+                    for (User u : userService.getAllUsersByRole(Role.INSTRUCTOR)) {
                         System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
                     }
                     System.out.println("-------------------------------------------------");
-                    System.out.print("Select an instructor ID: ");
-                    String userOption = scanner.nextLine();
-                    while(!userService.isValidInstructorID(userOption)){
-                        System.out.print("Select a valid instructor ID: ");
-                        userOption = scanner.nextLine();
+                    User selectedInstructor = null;
+                    int userId;
+
+                    while(selectedInstructor == null){
+                        System.out.print("Select an instructor ID: ");
+                        try {
+                            userId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Enter a number.");
+                        }
+                        selectedInstructor = userService.getInstructorById(userId);
+
+                        if (selectedInstructor == null){
+                            System.out.println("Select a valid instructor ID.");
+                        }
                     }
                     // courseService.assignInstructorToCourse(courseService, userService);
                     break;
