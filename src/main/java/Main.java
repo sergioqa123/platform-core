@@ -65,7 +65,7 @@ public class Main {
                 case 3: // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
-                    while(!courseService.isValidName(courseName)){
+                    while(!courseService.isValidCourseName(courseName)){
                         System.out.print("Enter a new course name: ");
                         courseName = scanner.nextLine();
                     }
@@ -97,7 +97,7 @@ public class Main {
                     System.out.println("---------------------------------------------");
                     System.out.print("Select a course ID: ");
                     String courseOption = scanner.nextLine();
-                    while(!courseService.isValidAvailableCourseID(courseOption)){
+                    while(!courseService.isValidAvailableCourseId(courseOption)){
                         System.out.print("Select a valid course ID: ");
                         courseOption = scanner.nextLine();
                     }

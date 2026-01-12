@@ -19,7 +19,7 @@ public class CourseService {
         courseRepository.saveCourse(course);
     }
 
-    public boolean isValidName(String courseName) {
+    public boolean isValidCourseName(String courseName) {
         for(Course c : courseRepository.getCourses()){
             if(courseName.equals(c.getName())) {
                 System.out.println("Course already exists.");
@@ -29,19 +29,28 @@ public class CourseService {
         return true;
     }
 
-    public boolean isValidAvailableCourseID(String courseOption) {
-        for (Course c : getAvailableCourses()) {
-            if (Integer.parseInt(courseOption) == c.getId()) {
-                System.out.println("Selected course: " + c.getName());
-                return true;
+    public Course getAvailableCourseById(int courseId){
+        for(Course c : getAvailableCourses()){
+            if(courseId == c.getId()){
+                return c;
             }
         }
-        System.out.println("Invalid course ID...");
-        return false;
+        return null;
     }
 
+//    public boolean isValidAvailableCourseId(String courseOption) { // to-do: simplify
+//        for (Course c : getAvailableCourses()) {
+//            if (Integer.parseInt(courseOption) == c.getId()) {
+//                System.out.println("Selected course: " + c.getName());
+//                return true;
+//            }
+//        }
+//        System.out.println("Invalid course ID...");
+//        return false;
+//    }
 
-    public boolean assignInstructorToCourse(Course course, User instructor){
+
+    public boolean assignInstructorToCourse(String courseOption, String userOption){
         if(instructor.getRole() == Role.INSTRUCTOR){
             course.setInstructor(instructor);
             course.setStatus(true); // course is now available
@@ -50,8 +59,9 @@ public class CourseService {
         return false;
     }
 
+    // "Available" = No instructor
     public ArrayList<Course> getAvailableCourses (){
-        ArrayList<Course> availableCourses = new ArrayList<>(); // "available" meaning there's no instructor
+        ArrayList<Course> availableCourses = new ArrayList<>();
         for (Course c : this.listCourses()) {
             if (c.getInstructor() == null) {
                 availableCourses.add(c);
@@ -60,25 +70,8 @@ public class CourseService {
         return availableCourses;
     }
 
-    public void assignInstructorToCourse(CourseService courseService, UserService userService) {
+    public void assignInstructorToCourse(String courseOption, String userOption) {
 
-//        //User logic
-//        do {
-//
-//
-//            // verify instructor id
-//            for (User u : instructors) {
-//                if (userOption == u.getId()) {
-//                    System.out.println("Selected instructor: " + u.getName());
-//                    fInstructor = true;
-//                    break;
-//                }
-//            }
-//            if (!fInstructor) {
-//                System.out.println("Invalid instructor ID...\n");
-//            }
-//
-//        } while (!fInstructor);
     }
 
     public ArrayList<Course> listCourses(){
