@@ -1,12 +1,13 @@
 package service;
 
-import domain.Role;
 import domain.User;
+import domain.Role;
 import repository.UserRepository;
 
 import java.util.ArrayList;
 
 public class UserService {
+
     private UserRepository userRepository;
 
     public UserService() {

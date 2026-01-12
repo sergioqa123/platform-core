@@ -2,7 +2,6 @@ package service;
 
 import domain.Course;
 import domain.Role;
-import domain.User;
 import repository.CourseRepository;
 
 import java.util.ArrayList;
@@ -19,14 +18,28 @@ public class CourseService {
         courseRepository.saveCourse(course);
     }
 
-    public boolean isValidCourseName(String courseName) {
+    public boolean alreadyExists(String courseName) {
         for(Course c : courseRepository.getCourses()){
             if(courseName.equals(c.getName())) {
-                System.out.println("Course already exists.");
                 return false;
             }
         }
         return true;
+    }
+
+    public ArrayList<Course> getAllCourses(){
+        return courseRepository.getCourses();
+    }
+
+    // "Available" = No instructor
+    public ArrayList<Course> getAvailableCourses (){
+        ArrayList<Course> availableCourses = new ArrayList<>();
+        for (Course c : this.getAllCourses()) {
+            if (c.getInstructor() == null) {
+                availableCourses.add(c);
+            }
+        }
+        return availableCourses;
     }
 
     public Course getAvailableCourseById(int courseId){
@@ -38,43 +51,14 @@ public class CourseService {
         return null;
     }
 
-//    public boolean isValidAvailableCourseId(String courseOption) { // to-do: simplify
-//        for (Course c : getAvailableCourses()) {
-//            if (Integer.parseInt(courseOption) == c.getId()) {
-//                System.out.println("Selected course: " + c.getName());
-//                return true;
-//            }
+//    public boolean assignInstructorToCourse(Course course, User instructor){
+//        if(instructor.getRole() == Role.INSTRUCTOR){
+//            course.setInstructor(instructor);
+//            course.setStatus(true); // course is now available
+//            return true; // successful assignment
 //        }
-//        System.out.println("Invalid course ID...");
 //        return false;
 //    }
 
 
-    public boolean assignInstructorToCourse(String courseOption, String userOption){
-        if(instructor.getRole() == Role.INSTRUCTOR){
-            course.setInstructor(instructor);
-            course.setStatus(true); // course is now available
-            return true; // successful assignment
-        }
-        return false;
-    }
-
-    // "Available" = No instructor
-    public ArrayList<Course> getAvailableCourses (){
-        ArrayList<Course> availableCourses = new ArrayList<>();
-        for (Course c : this.listCourses()) {
-            if (c.getInstructor() == null) {
-                availableCourses.add(c);
-            }
-        }
-        return availableCourses;
-    }
-
-    public void assignInstructorToCourse(String courseOption, String userOption) {
-
-    }
-
-    public ArrayList<Course> listCourses(){
-        return courseRepository.getCourses();
-    }
 }
