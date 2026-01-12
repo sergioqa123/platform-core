@@ -83,7 +83,7 @@ public class Main {
                         if (c.getInstructor() == null){
                             System.out.println("Not assigned");
                         } else {
-                            System.out.println(c.getInstructor());
+                            System.out.println(c.getInstructor().getName());
                         }
                     }
                     System.out.println("---------------------------------------");
@@ -128,6 +128,7 @@ public class Main {
                             userId = Integer.parseInt(scanner.nextLine());
                         } catch (NumberFormatException e) {
                             System.out.println("Enter a number.");
+                            continue;
                         }
                         selectedInstructor = userService.getInstructorById(userId);
 
@@ -135,7 +136,8 @@ public class Main {
                             System.out.println("Select a valid instructor ID.");
                         }
                     }
-                    // courseService.assignInstructorToCourse(courseService, userService);
+                    courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
+                    System.out.println("Instructor assigned succesfully!");
                     break;
                 default:
                     System.out.println("Invalid option...\n");
