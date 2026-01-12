@@ -13,20 +13,20 @@ public class User {
         this.role = role;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public String getName() {
         return name;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isActive() {
