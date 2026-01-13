@@ -19,9 +19,11 @@ public class Main {
             System.out.println("=========== Welcome! ==========");
             System.out.println("[1] Register user");
             System.out.println("[2] List users");
-            System.out.println("[3] Register course");
-            System.out.println("[4] List courses");
-            System.out.println("[5] Assign course instructor");
+            System.out.println("[3] Update user");
+            System.out.println("[4] Delete user");
+            System.out.println("[5] Register course");
+            System.out.println("[6] List courses");
+            System.out.println("[7] Assign course instructor");
             System.out.println("[0] Exit");
             System.out.println("===============================");
             System.out.print("Choose an option: ");
@@ -33,10 +35,10 @@ public class Main {
             }
             System.out.println(" ");
             switch (option){
-                case 0:
+                case 0:{
                     System.out.println("Goodbye!");
-                    break;
-                case 1: // Register user
+                    break;}
+                case 1:{ // Register user
                     System.out.println("What type of user you want to register?");
                     System.out.println("1. Student");
                     System.out.println("2. Instructor");
@@ -53,16 +55,37 @@ public class Main {
                     userService.registerUser(name, email, roleInput);
                     System.out.println("User registered successfully!");
                     System.out.println(" ");
-                    break;
-                case 2: // List users
-                    System.out.println("------------------- User list -------------------");
-                    for (User u : userService.getAllUsers()) {
-                        System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
+                    break;}
+                case 2:{ // List users
+                    printUsers(userService);
+                    break;}
+                case 3:{ // Update user
+                    printUsers(userService);
+                    User selectedUser = null;
+                    int userId = 0;
+
+                    while (selectedUser == null){
+                        System.out.print("Select a user ID: ");
+                        try {
+                            userId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Enter a number.");
+                            continue;
+                        }
+                        selectedUser = userService.getUserById(userId);
+                        if (selectedUser == null){
+                            System.out.println("User not found.");
+                        }
                     }
-                    System.out.println("-------------------------------------------------");
-                    System.out.println(" ");
-                    break;
-                case 3: // Register course
+                    System.out.print("Enter a new name: ");
+                    String newName = scanner.nextLine();
+                    System.out.print("Enter a new email: ");
+                    String newEmail = scanner.nextLine();
+
+                    userService.updateUser(selectedUser, newName, newEmail);
+                    System.out.println("User updated successfully");
+                    break;}
+                case 5:{ // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
                     while(!courseService.alreadyExists(courseName)){
@@ -75,21 +98,21 @@ public class Main {
                     Course course = new Course(courseName, description);
                     courseService.registerCourse(course);
                     System.out.println(" ");
-                    break;
-                case 4: // List courses
+                    break;}
+                case 6:{ // List courses
                     System.out.println("-------------- Course list --------------");
                     for (Course c : courseService.getAllCourses()) {
                         System.out.print("Course: " + c.getName() + ", Description: " + c.getDescription()  + ", Instructor: ");
                         if (c.getInstructor() == null){
                             System.out.println("Not assigned");
                         } else {
-                            System.out.println(c.getInstructor());
+                            System.out.println(c.getInstructor().getName());
                         }
                     }
                     System.out.println("---------------------------------------");
                     System.out.println(" ");
-                    break;
-                case 5: // Assign course instructor
+                    break;}
+                case 7:{ // Assign course instructor
                     // to do: return to menu if course list is empty (same for instructors)
                     System.out.println("------------- Available courses -------------");
                     for (Course c : courseService.getAvailableCourses()){
@@ -128,6 +151,7 @@ public class Main {
                             userId = Integer.parseInt(scanner.nextLine());
                         } catch (NumberFormatException e) {
                             System.out.println("Enter a number.");
+                            continue;
                         }
                         selectedInstructor = userService.getInstructorById(userId);
 
@@ -135,8 +159,9 @@ public class Main {
                             System.out.println("Select a valid instructor ID.");
                         }
                     }
-                    // courseService.assignInstructorToCourse(courseService, userService);
-                    break;
+                    courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
+                    System.out.println("Instructor assigned succesfully!");
+                    break;}
                 default:
                     System.out.println("Invalid option...\n");
             }
@@ -144,6 +169,19 @@ public class Main {
         } while (option != 0);
 
         scanner.close();
+    }
+
+    public static void printUsers(UserService userService){
+        System.out.println("------------------- User list -------------------");
+        for (User u : userService.getAllUsers()) {
+            System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
+        }
+        System.out.println("-------------------------------------------------");
+        System.out.println(" ");
+    }
+
+    public static void printCourses(){
+
     }
 
 }

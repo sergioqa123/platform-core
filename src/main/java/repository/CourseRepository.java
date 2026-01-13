@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class CourseRepository {
 
-    private ArrayList<Course> courseList = new ArrayList<>();
+    private final ArrayList<Course> courseList = new ArrayList<>();
     private int courseId = 1;
 
     public void saveCourse(Course course){

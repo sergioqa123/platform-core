@@ -1,7 +1,7 @@
 package service;
 
 import domain.Course;
-import domain.Role;
+import domain.User;
 import repository.CourseRepository;
 
 import java.util.ArrayList;
@@ -51,14 +51,8 @@ public class CourseService {
         return null;
     }
 
-//    public boolean assignInstructorToCourse(Course course, User instructor){
-//        if(instructor.getRole() == Role.INSTRUCTOR){
-//            course.setInstructor(instructor);
-//            course.setStatus(true); // course is now available
-//            return true; // successful assignment
-//        }
-//        return false;
-//    }
-
-
+    public void assignInstructorToCourse(Course course, User instructor){
+        course.setInstructor(instructor);
+        course.setStatus(true); // course is now available
+    }
 }

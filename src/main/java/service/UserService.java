@@ -8,10 +8,22 @@ import java.util.ArrayList;
 
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService() {
         this.userRepository = new UserRepository();
+    }
+
+    public void registerUser(String name, String email, String roleInput){
+        Role role = null;
+        if (roleInput.equals("1")){
+            role = Role.STUDENT;
+        }
+        if (roleInput.equals("2")){
+            role = Role.INSTRUCTOR;
+        }
+        User user = new User(name, email, role);
+        userRepository.saveUser(user);
     }
 
     public boolean isValidRole(String roleInput){
@@ -41,29 +53,18 @@ public class UserService {
         return null;
     }
 
-    public boolean isValidInstructorId(String userOption){ //!!!!!!!!!
-        for (User u : listUsersByRole(Role.INSTRUCTOR)){
-            if (Integer.parseInt(userOption) == u.getId()){
-                System.out.println("Selected user: " + u.getName()); //move this to main
-                return true;
+    public User getUserById(int userId){
+        for (User u : getAllUsers()){
+            if(u.getId() == userId){
+                return u;
             }
         }
-        System.out.println("Invalid instructor ID...");
-        return false;
+        return null;
     }
 
-    public void registerUser(String name, String email, String roleInput){
-        Role role = null;
-        if (roleInput.equals("1")){
-            role = Role.STUDENT;
-        }
-        if (roleInput.equals("2")){
-            role = Role.INSTRUCTOR;
-        }
-        User user = new User(name, email, role);
-        userRepository.saveUser(user);
+    public void updateUser(User selectedUser, String newName, String newMail){
+        selectedUser.setName(newName);
+        selectedUser.setEmail(newMail);
     }
-
-
 
 }
