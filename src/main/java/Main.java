@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+
+    private static Scanner scanner = new Scanner(System.in);
+    private static UserService userService = new UserService();
+    private static CourseService courseService = new CourseService();
+
     public static void main(String[] args) {
         int option = 0;
-
-        Scanner scanner = new Scanner(System.in);
-        UserService userService = new UserService();
-        CourseService courseService = new CourseService();
 
         do {
             System.out.println("=========== Welcome! ==========");
@@ -23,7 +24,9 @@ public class Main {
             System.out.println("[4] Delete user");
             System.out.println("[5] Register course");
             System.out.println("[6] List courses");
-            System.out.println("[7] Assign course instructor");
+            System.out.println("[7] Update course");
+            System.out.println("[8] Delete course");
+            System.out.println("[9] Assign course instructor");
             System.out.println("[0] Exit");
             System.out.println("===============================");
             System.out.print("Choose an option: ");
@@ -44,7 +47,7 @@ public class Main {
                     System.out.println("2. Instructor");
                     System.out.print("Choose an option: ");
                     String roleInput = scanner.nextLine();
-                    while(!userService.isValidRole(roleInput)){
+                    while (!userService.isValidRole(roleInput)){
                         System.out.print("Enter a valid type of user: ");
                         roleInput = scanner.nextLine();
                     }
@@ -57,10 +60,10 @@ public class Main {
                     System.out.println(" ");
                     break;}
                 case 2:{ // List users
-                    printUsers(userService);
+                    printUsers();
                     break;}
                 case 3:{ // Update user
-                    printUsers(userService);
+                    printUsers();
                     User selectedUser = null;
                     int userId = 0;
 
@@ -86,7 +89,7 @@ public class Main {
                     System.out.println("User updated successfully");
                     break;}
                 case 4: { // Delete user
-                    printUsers(userService);
+                    printUsers();
                     User selectedUser = null;
                     int userId = 0;
 
@@ -110,7 +113,7 @@ public class Main {
                 case 5:{ // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
-                    while(!courseService.alreadyExists(courseName)){
+                    while (!courseService.alreadyExists(courseName)){
                         System.out.println("Course already exists.");
                         System.out.print("Enter a new course name: ");
                         courseName = scanner.nextLine();
@@ -134,7 +137,55 @@ public class Main {
                     System.out.println("---------------------------------------");
                     System.out.println(" ");
                     break;}
-                case 7:{ // Assign course instructor
+                case 7:{ // Update course
+                    printCourses();
+                    Course selectedCourse = null;
+                    int courseId = 0;
+
+                    while (selectedCourse == null){
+                        System.out.print("Select a course ID: ");
+                        try {
+                            courseId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Enter a number.");
+                            continue;
+                        }
+                        selectedCourse = courseService.getCourseById(courseId);
+                        if (selectedCourse == null){
+                            System.out.println("Course not found.");
+                        }
+                    }
+                    System.out.print("Enter a new name: ");
+                    String newName = scanner.nextLine();
+                    System.out.print("Enter a new description: ");
+                    String newDescription = scanner.nextLine();
+
+                    courseService.updateCourse(selectedCourse, newName, newDescription);
+                    System.out.println("User updated successfully");
+                    break;}
+                case 8:{ // Delete course
+                    printCourses();
+                    Course selectedCourse = null;
+                    int courseId = 0;
+
+                    while (selectedCourse == null){
+                        System.out.print("Select the course ID to be deleted: ");
+                        try {
+                            courseId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Enter a number.");
+                            continue;
+                        }
+                        selectedCourse = courseService.getCourseById(courseId);
+                        if (selectedCourse == null){
+                            System.out.println("Course not found.");
+                        }
+                    }
+                    System.out.println("Course '" + selectedCourse.getName() + "' deleted successfully");
+                    System.out.println(" ");
+                    courseService.deleteUser(selectedCourse);
+                    break;}
+                case 9: { // Assign course instructor
                     // to do: return to menu if course list is empty (same for instructors)
                     System.out.println("------------- Available courses -------------");
                     for (Course c : courseService.getAvailableCourses()){
@@ -167,7 +218,7 @@ public class Main {
                     User selectedInstructor = null;
                     int userId;
 
-                    while(selectedInstructor == null){
+                    while (selectedInstructor == null){
                         System.out.print("Select an instructor ID: ");
                         try {
                             userId = Integer.parseInt(scanner.nextLine());
@@ -193,9 +244,9 @@ public class Main {
         scanner.close();
     }
 
-    public static void printUsers(UserService userService){
+    public static void printUsers(){
         System.out.println("------------------- User list -------------------");
-        for (User u : userService.getAllUsers()) {
+        for (User u : userService.getAllUsers()){
             System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
         }
         System.out.println("-------------------------------------------------");
@@ -203,7 +254,11 @@ public class Main {
     }
 
     public static void printCourses(){
-
+        System.out.println("------------- Course list -------------");
+        for (Course c : courseService.getAllCourses()){
+            System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
+        }
+        System.out.println("----------------------------------------------");
+        System.out.println(" ");
     }
-
 }

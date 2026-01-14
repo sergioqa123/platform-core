@@ -11,8 +11,12 @@ public class CourseRepository {
 
     public void saveCourse(Course course){
         course.setId(courseId);
-        this.courseId++;
-        this.courseList.add(course);
+        courseId++;
+        courseList.add(course);
+    }
+
+    public void removeCourse(Course course){
+        courseList.remove(course);
     }
 
     public ArrayList<Course> getCourses(){

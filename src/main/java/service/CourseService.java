@@ -19,8 +19,8 @@ public class CourseService {
     }
 
     public boolean alreadyExists(String courseName) {
-        for(Course c : courseRepository.getCourses()){
-            if(courseName.equals(c.getName())) {
+        for (Course c : courseRepository.getCourses()){
+            if (courseName.equals(c.getName())) {
                 return false;
             }
         }
@@ -42,9 +42,18 @@ public class CourseService {
         return availableCourses;
     }
 
+    public Course getCourseById(int courseId){
+        for (Course c : getAllCourses()){
+            if (c.getId() == courseId){
+                return c;
+            }
+        }
+        return null;
+    }
+
     public Course getAvailableCourseById(int courseId){
-        for(Course c : getAvailableCourses()){
-            if(c.getId() == courseId){
+        for (Course c : getAvailableCourses()){
+            if (c.getId() == courseId){
                 return c;
             }
         }
@@ -54,5 +63,14 @@ public class CourseService {
     public void assignInstructorToCourse(Course course, User instructor){
         course.setInstructor(instructor);
         course.setStatus(true); // course is now available
+    }
+
+    public void updateCourse(Course selectedCourse, String newName, String newDescription){
+        selectedCourse.setName(newName);
+        selectedCourse.setDescription(newDescription);
+    }
+
+    public void deleteUser(Course selectedCourse){
+        courseRepository.removeCourse(selectedCourse);
     }
 }
