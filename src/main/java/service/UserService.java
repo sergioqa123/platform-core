@@ -67,4 +67,8 @@ public class UserService {
         selectedUser.setEmail(newMail);
     }
 
+    public void deleteUser(User selectedUser){
+        userRepository.removeUser(selectedUser);
+    }
+
 }
