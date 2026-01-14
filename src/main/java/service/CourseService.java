@@ -55,4 +55,13 @@ public class CourseService {
         course.setInstructor(instructor);
         course.setStatus(true); // course is now available
     }
+
+    public void updateCourse(Course selectedCourse, String newName, String newDescription){
+        selectedCourse.setName(newName);
+        selectedCourse.setDescription(newDescription);
+    }
+
+    public void deleteCourse(Course selectedCourse){
+        courseRepository.removeCourse(selectedCourse);
+    }
 }
