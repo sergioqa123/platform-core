@@ -113,7 +113,7 @@ public class Main {
                 case 5:{ // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
-                    while (!courseService.alreadyExists(courseName)){
+                    while (!courseService.isUnique(courseName)){
                         System.out.println("Course already exists.");
                         System.out.print("Enter a new course name: ");
                         courseName = scanner.nextLine();

@@ -18,7 +18,7 @@ public class CourseService {
         courseRepository.saveCourse(course);
     }
 
-    public boolean alreadyExists(String courseName) {
+    public boolean isUnique(String courseName) {
         for (Course c : courseRepository.getCourses()){
             if (courseName.equals(c.getName())) {
                 return false;
@@ -70,7 +70,7 @@ public class CourseService {
         selectedCourse.setDescription(newDescription);
     }
 
-    public void deleteUser(Course selectedCourse){
+    public void deleteCourse(Course selectedCourse){
         courseRepository.removeCourse(selectedCourse);
     }
 }
