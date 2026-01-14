@@ -183,7 +183,7 @@ public class Main {
                     }
                     System.out.println("Course '" + selectedCourse.getName() + "' deleted successfully");
                     System.out.println(" ");
-                    courseService.deleteUser(selectedCourse);
+                    courseService.deleteCourse(selectedCourse);
                     break;}
                 case 9: { // Assign course instructor
                     // to do: return to menu if course list is empty (same for instructors)

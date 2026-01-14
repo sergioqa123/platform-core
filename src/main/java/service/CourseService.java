@@ -5,6 +5,7 @@ import domain.User;
 import repository.CourseRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CourseService {
 
@@ -27,13 +28,13 @@ public class CourseService {
         return true;
     }
 
-    public ArrayList<Course> getAllCourses(){
+    public List<Course> getAllCourses(){
         return courseRepository.getCourses();
     }
 
     // "Available" = no active
-    public ArrayList<Course> getAvailableCourses (){
-        ArrayList<Course> availableCourses = new ArrayList<>();
+    public List<Course> getAvailableCourses (){
+        List<Course> availableCourses = new ArrayList<>();
         for (Course c : this.getAllCourses()) {
             if (!c.isActive()) {
                 availableCourses.add(c);
