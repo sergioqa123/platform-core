@@ -85,6 +85,28 @@ public class Main {
                     userService.updateUser(selectedUser, newName, newEmail);
                     System.out.println("User updated successfully");
                     break;}
+                case 4: { // Delete user
+                    printUsers(userService);
+                    User selectedUser = null;
+                    int userId = 0;
+
+                    while (selectedUser == null){
+                        System.out.print("Select the user ID to be deleted: ");
+                        try {
+                            userId = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Enter a number.");
+                            continue;
+                        }
+                        selectedUser = userService.getUserById(userId);
+                        if (selectedUser == null){
+                            System.out.println("User not found.");
+                        }
+                    }
+                    System.out.println("User '" + selectedUser.getName() + "' deleted successfully");
+                    System.out.println(" ");
+                    userService.deleteUser(selectedUser);
+                    break;}
                 case 5:{ // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
@@ -160,7 +182,7 @@ public class Main {
                         }
                     }
                     courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
-                    System.out.println("Instructor assigned succesfully!");
+                    System.out.println("Instructor assigned successfully!");
                     break;}
                 default:
                     System.out.println("Invalid option...\n");
