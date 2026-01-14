@@ -64,51 +64,11 @@ public class Main {
                     break;}
                 case 3:{ // Update user
                     printUsers();
-                    User selectedUser = null;
-                    int userId = 0;
-
-                    while (selectedUser == null){
-                        System.out.print("Select a user ID: ");
-                        try {
-                            userId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Enter a number.");
-                            continue;
-                        }
-                        selectedUser = userService.getUserById(userId);
-                        if (selectedUser == null){
-                            System.out.println("User not found.");
-                        }
-                    }
-                    System.out.print("Enter a new name: ");
-                    String newName = scanner.nextLine();
-                    System.out.print("Enter a new email: ");
-                    String newEmail = scanner.nextLine();
-
-                    userService.updateUser(selectedUser, newName, newEmail);
-                    System.out.println("User updated successfully");
+                    updateUser();
                     break;}
                 case 4: { // Delete user
                     printUsers();
-                    User selectedUser = null;
-                    int userId = 0;
-
-                    while (selectedUser == null){
-                        System.out.print("Select the user ID to be deleted: ");
-                        try {
-                            userId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Enter a number.");
-                            continue;
-                        }
-                        selectedUser = userService.getUserById(userId);
-                        if (selectedUser == null){
-                            System.out.println("User not found.");
-                        }
-                    }
-                    System.out.println("User '" + selectedUser.getName() + "' deleted successfully");
-                    System.out.println(" ");
-                    userService.deleteUser(selectedUser);
+                    deleteUser();
                     break;}
                 case 5:{ // Register course
                     System.out.print("Enter course name: ");
@@ -161,7 +121,7 @@ public class Main {
                     String newDescription = scanner.nextLine();
 
                     courseService.updateCourse(selectedCourse, newName, newDescription);
-                    System.out.println("User updated successfully");
+                    System.out.println("Course updated successfully");
                     break;}
                 case 8:{ // Delete course
                     printCourses();
@@ -242,6 +202,42 @@ public class Main {
         } while (option != 0);
 
         scanner.close();
+    }
+
+    public static User selectUserById(){
+        User selectedUser = null;
+        int userId = 0;
+        while (selectedUser == null){
+            System.out.print("Select a user ID: ");
+            try {
+                userId = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a number.");
+                continue;
+            }
+            selectedUser = userService.getUserById(userId);
+            if (selectedUser == null){
+                System.out.println("User not found.");
+            }
+        }
+        return selectedUser;
+    }
+
+    public static void updateUser(){
+        User selectedUser = selectUserById();
+        System.out.print("Enter a new name: ");
+        String newName = scanner.nextLine();
+        System.out.print("Enter a new email: ");
+        String newEmail = scanner.nextLine();
+        userService.updateUser(selectedUser, newName, newEmail);
+        System.out.println("User updated successfully");
+    }
+
+    public static void deleteUser(){
+        User selectedUser = selectUserById();
+        System.out.println("User '" + selectedUser.getName() + "' deleted successfully");
+        System.out.println(" ");
+        userService.deleteUser(selectedUser);
     }
 
     public static void printUsers(){

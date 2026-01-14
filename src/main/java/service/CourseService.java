@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CourseService {
 
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
     public CourseService(){
         this.courseRepository = new CourseRepository();
