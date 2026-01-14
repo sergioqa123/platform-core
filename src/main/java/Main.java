@@ -15,7 +15,6 @@ public class Main {
 
     public static void main(String[] args) {
         int option = 0;
-
         do {
             System.out.println("=========== Welcome! ==========");
             System.out.println("[1] Register user");
@@ -32,44 +31,27 @@ public class Main {
             System.out.print("Choose an option: ");
             try {
                 option = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e){
                 System.out.print("\nEnter a valid option.");
                 option = -1; // Change option value to prevent finishing the loop
             }
             System.out.println(" ");
             switch (option){
-                case 0:{
+                case 0:
                     System.out.println("Goodbye!");
-                    break;}
-                case 1:{ // Register user
-                    System.out.println("What type of user you want to register?");
-                    System.out.println("1. Student");
-                    System.out.println("2. Instructor");
-                    System.out.print("Choose an option: ");
-                    String roleInput = scanner.nextLine();
-                    while (!userService.isValidRole(roleInput)){
-                        System.out.print("Enter a valid type of user: ");
-                        roleInput = scanner.nextLine();
-                    }
-                    System.out.print("Enter a name: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Enter an email: ");
-                    String email = scanner.nextLine();
-                    userService.registerUser(name, email, roleInput);
-                    System.out.println("User registered successfully!");
-                    System.out.println(" ");
-                    break;}
-                case 2:{ // List users
+                    break;
+                case 1:
+                    registerUser();
+                    break;
+                case 2:
                     printUsers();
-                    break;}
-                case 3:{ // Update user
-                    printUsers();
+                    break;
+                case 3:
                     updateUser();
-                    break;}
-                case 4: { // Delete user
-                    printUsers();
+                    break;
+                case 4:
                     deleteUser();
-                    break;}
+                    break;
                 case 5:{ // Register course
                     System.out.print("Enter course name: ");
                     String courseName = scanner.nextLine();
@@ -204,6 +186,25 @@ public class Main {
         scanner.close();
     }
 
+    public static void registerUser(){
+        System.out.println("What type of user you want to register?");
+        System.out.println("1. Student");
+        System.out.println("2. Instructor");
+        System.out.print("Choose an option: ");
+        String roleInput = scanner.nextLine();
+        while (!userService.isValidRole(roleInput)){
+            System.out.print("Enter a valid type of user: ");
+            roleInput = scanner.nextLine();
+        }
+        System.out.print("Enter a name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter an email: ");
+        String email = scanner.nextLine();
+        userService.registerUser(name, email, roleInput);
+        System.out.println("User registered successfully!");
+        System.out.println(" ");
+    }
+
     public static User selectUserById(){
         User selectedUser = null;
         int userId = 0;
@@ -224,6 +225,7 @@ public class Main {
     }
 
     public static void updateUser(){
+        printUsers();
         User selectedUser = selectUserById();
         System.out.print("Enter a new name: ");
         String newName = scanner.nextLine();
@@ -234,6 +236,7 @@ public class Main {
     }
 
     public static void deleteUser(){
+        printUsers();
         User selectedUser = selectUserById();
         System.out.println("User '" + selectedUser.getName() + "' deleted successfully");
         System.out.println(" ");
