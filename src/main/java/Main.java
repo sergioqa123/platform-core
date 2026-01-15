@@ -52,131 +52,22 @@ public class Main {
                 case 4:
                     deleteUser();
                     break;
-                case 5:{ // Register course
-                    System.out.print("Enter course name: ");
-                    String courseName = scanner.nextLine();
-                    while (!courseService.isUnique(courseName)){
-                        System.out.println("Course already exists.");
-                        System.out.print("Enter a new course name: ");
-                        courseName = scanner.nextLine();
-                    }
-                    System.out.print("Enter a description: ");
-                    String description = scanner.nextLine();
-                    Course course = new Course(courseName, description);
-                    courseService.registerCourse(course);
-                    System.out.println(" ");
-                    break;}
-                case 6:{ // List courses
-                    System.out.println("-------------- Course list --------------");
-                    for (Course c : courseService.getAllCourses()) {
-                        System.out.print("Course: " + c.getName() + ", Description: " + c.getDescription()  + ", Instructor: ");
-                        if (c.getInstructor() == null){
-                            System.out.println("Not assigned");
-                        } else {
-                            System.out.println(c.getInstructor().getName());
-                        }
-                    }
-                    System.out.println("---------------------------------------");
-                    System.out.println(" ");
-                    break;}
-                case 7:{ // Update course
+                case 5:
+                    registerCourse();
+                    break;
+                case 6:{
                     printCourses();
-                    Course selectedCourse = null;
-                    int courseId = 0;
-
-                    while (selectedCourse == null){
-                        System.out.print("Select a course ID: ");
-                        try {
-                            courseId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Enter a number.");
-                            continue;
-                        }
-                        selectedCourse = courseService.getCourseById(courseId);
-                        if (selectedCourse == null){
-                            System.out.println("Course not found.");
-                        }
-                    }
-                    System.out.print("Enter a new name: ");
-                    String newName = scanner.nextLine();
-                    System.out.print("Enter a new description: ");
-                    String newDescription = scanner.nextLine();
-
-                    courseService.updateCourse(selectedCourse, newName, newDescription);
-                    System.out.println("Course updated successfully");
                     break;}
-                case 8:{ // Delete course
-                    printCourses();
-                    Course selectedCourse = null;
-                    int courseId = 0;
-
-                    while (selectedCourse == null){
-                        System.out.print("Select the course ID to be deleted: ");
-                        try {
-                            courseId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Enter a number.");
-                            continue;
-                        }
-                        selectedCourse = courseService.getCourseById(courseId);
-                        if (selectedCourse == null){
-                            System.out.println("Course not found.");
-                        }
-                    }
-                    System.out.println("Course '" + selectedCourse.getName() + "' deleted successfully");
-                    System.out.println(" ");
-                    courseService.deleteCourse(selectedCourse);
+                case 7:{
+                    updateCourse();
                     break;}
-                case 9: { // Assign course instructor
+                case 8:{
+                    deleteCourse();
+                    break;}
+                case 9:
                     // to do: return to menu if course list is empty (same for instructors)
-                    System.out.println("------------- Available courses -------------");
-                    for (Course c : courseService.getAvailableCourses()){
-                        System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
-                    }
-                    System.out.println("---------------------------------------------");
-                    Course selectedCourse = null;
-                    int courseId;
-
-                    while (selectedCourse == null) {
-                        System.out.print("Select a course ID: ");
-                        try {
-                            courseId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.print("Enter a number.");
-                            continue;
-                        }
-                        selectedCourse = courseService.getAvailableCourseById(courseId);
-
-                        if (selectedCourse == null){
-                            System.out.println("Select a valid course ID.");
-                        }
-                    }
-
-                    System.out.println("------------- Available instructors -------------");
-                    for (User u : userService.getAllUsersByRole(Role.INSTRUCTOR)) {
-                        System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
-                    }
-                    System.out.println("-------------------------------------------------");
-                    User selectedInstructor = null;
-                    int userId;
-
-                    while (selectedInstructor == null){
-                        System.out.print("Select an instructor ID: ");
-                        try {
-                            userId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Enter a number.");
-                            continue;
-                        }
-                        selectedInstructor = userService.getInstructorById(userId);
-
-                        if (selectedInstructor == null){
-                            System.out.println("Select a valid instructor ID.");
-                        }
-                    }
-                    courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
-                    System.out.println("Instructor assigned successfully!");
-                    break;}
+                    assignInstructorToCourse();
+                    break;
                 default:
                     System.out.println("Invalid option...\n");
             }
@@ -185,6 +76,8 @@ public class Main {
 
         scanner.close();
     }
+
+    // -- USER OPTIONS --
 
     public static void registerUser(){
         System.out.println("What type of user you want to register?");
@@ -224,6 +117,15 @@ public class Main {
         return selectedUser;
     }
 
+    public static void printUsers(){
+        System.out.println("------------------- User list -------------------");
+        for (User u : userService.getAllUsers()){
+            System.out.println(u);
+        }
+        System.out.println("-------------------------------------------------");
+        System.out.println(" ");
+    }
+
     public static void updateUser(){
         printUsers();
         User selectedUser = selectUserById();
@@ -243,21 +145,129 @@ public class Main {
         userService.deleteUser(selectedUser);
     }
 
-    public static void printUsers(){
-        System.out.println("------------------- User list -------------------");
-        for (User u : userService.getAllUsers()){
-            System.out.println("ID: " + u.getId() + ", Name: " + u.getName() + ", Email: " + u.getEmail() + ", Role: " + u.getRole());
+    // -- COURSE OPTIONS --
+
+    public static void registerCourse(){
+        System.out.print("Enter course name: ");
+        String courseName = scanner.nextLine();
+        while (!courseService.isUnique(courseName)){
+            System.out.println("Course already exists.");
+            System.out.print("Enter a new course name: ");
+            courseName = scanner.nextLine();
         }
-        System.out.println("-------------------------------------------------");
+        System.out.print("Enter a description: ");
+        String description = scanner.nextLine();
+        Course course = new Course(courseName, description);
+        courseService.registerCourse(course);
         System.out.println(" ");
+    }
+
+    public static Course selectCourseById(){
+        Course selectedCourse = null;
+        int courseId = 0;
+
+        while (selectedCourse == null){
+            System.out.print("Select a course ID: ");
+            try {
+                courseId = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a number.");
+                continue;
+            }
+            selectedCourse = courseService.getCourseById(courseId);
+            if (selectedCourse == null){
+                System.out.println("Course not found.");
+            }
+        }
+        return selectedCourse;
+    }
+
+    public static Course selectAvailableCourseById(){
+        Course selectedCourse = null;
+        int courseId = 0;
+
+        while (selectedCourse == null){
+            System.out.print("Select a course ID: ");
+            try {
+                courseId = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a number.");
+                continue;
+            }
+            selectedCourse = courseService.getAvailableCourseById(courseId);
+            if (selectedCourse == null){
+                System.out.println("Course not found.");
+            }
+        }
+        return selectedCourse;
     }
 
     public static void printCourses(){
         System.out.println("------------- Course list -------------");
         for (Course c : courseService.getAllCourses()){
-            System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
+            System.out.println(c);
         }
         System.out.println("----------------------------------------------");
         System.out.println(" ");
+    }
+
+    public static void printAvailableCourses() {
+        System.out.println("------------- Available courses -------------");
+        for (Course c : courseService.getAvailableCourses()) {
+            if (!c.isActive()) {
+                System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
+            }
+            System.out.println("---------------------------------------------");
+        }
+    }
+
+    public static void updateCourse(){
+        printCourses();
+        Course selectedCourse = selectCourseById();
+        System.out.print("Enter a new name: ");
+        String newName = scanner.nextLine();
+        System.out.print("Enter a new description: ");
+        String newDescription = scanner.nextLine();
+
+        courseService.updateCourse(selectedCourse, newName, newDescription);
+        System.out.println("Course updated successfully");
+    }
+
+    public static void deleteCourse(){
+        printCourses();
+        Course selectedCourse = selectCourseById();
+        System.out.println("Course '" + selectedCourse.getName() + "' deleted successfully");
+        System.out.println(" ");
+        courseService.deleteCourse(selectedCourse);
+    }
+
+    public static void assignInstructorToCourse(){
+        printAvailableCourses();
+        Course selectedCourse = selectCourseById();
+
+        System.out.println("------------- Available instructors -------------");
+        for (User u : userService.getAllUsersByRole(Role.INSTRUCTOR)) {
+            System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
+        }
+        System.out.println("-------------------------------------------------");
+        User selectedInstructor = null;
+        int userId;
+
+        while (selectedInstructor == null){
+            System.out.print("Select an instructor ID: ");
+            try {
+                userId = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a number.");
+                continue;
+            }
+            selectedInstructor = userService.getInstructorById(userId);
+
+            if (selectedInstructor == null){
+                System.out.println("Select a valid instructor ID.");
+            }
+        }
+        courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
+        System.out.println("Instructor assigned successfully!");
     }
 }
