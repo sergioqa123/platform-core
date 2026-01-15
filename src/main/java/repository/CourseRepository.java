@@ -3,10 +3,11 @@ package repository;
 import domain.Course;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CourseRepository {
 
-    private final ArrayList<Course> courseList = new ArrayList<>();
+    private final List<Course> courseList = new ArrayList<>();
     private int courseId = 1;
 
     public void saveCourse(Course course){
@@ -19,7 +20,7 @@ public class CourseRepository {
         courseList.remove(course);
     }
 
-    public ArrayList<Course> getCourses(){
+    public List<Course> getCourses(){
         return courseList;
     }
 }

@@ -44,4 +44,12 @@ public class User {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + id +
+                ", Name: " + name +
+                ", Email: " + email +
+                ", Role: " + role;
+    }
 }

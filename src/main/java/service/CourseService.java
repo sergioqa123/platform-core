@@ -5,10 +5,11 @@ import domain.User;
 import repository.CourseRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CourseService {
 
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
     public CourseService(){
         this.courseRepository = new CourseRepository();
@@ -18,7 +19,7 @@ public class CourseService {
         courseRepository.saveCourse(course);
     }
 
-    public boolean alreadyExists(String courseName) {
+    public boolean isUnique(String courseName) {
         for (Course c : courseRepository.getCourses()){
             if (courseName.equals(c.getName())) {
                 return false;
@@ -27,13 +28,13 @@ public class CourseService {
         return true;
     }
 
-    public ArrayList<Course> getAllCourses(){
+    public List<Course> getAllCourses(){
         return courseRepository.getCourses();
     }
 
     // "Available" = no active
-    public ArrayList<Course> getAvailableCourses (){
-        ArrayList<Course> availableCourses = new ArrayList<>();
+    public List<Course> getAvailableCourses (){
+        List<Course> availableCourses = new ArrayList<>();
         for (Course c : this.getAllCourses()) {
             if (!c.isActive()) {
                 availableCourses.add(c);
@@ -70,7 +71,7 @@ public class CourseService {
         selectedCourse.setDescription(newDescription);
     }
 
-    public void deleteUser(Course selectedCourse){
+    public void deleteCourse(Course selectedCourse){
         courseRepository.removeCourse(selectedCourse);
     }
 }
