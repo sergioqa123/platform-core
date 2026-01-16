@@ -65,17 +65,11 @@ public class UserService {
     }
 
     public User getUserById(int userId){
-        for (User u : getAllUsers()){
-            if (u.getId() == userId){
-                return u;
-            }
-        }
-        return null;
+        return userRepository.getUserById(userId);
     }
 
-    public void updateUser(User selectedUser, String newName, String newMail){
-        selectedUser.setName(newName);
-        selectedUser.setEmail(newMail);
+    public void updateUser(User selectedUser, String newName, String newEmail){
+        userRepository.updateUser(selectedUser, newName, newEmail);
     }
 
     public void deleteUser(User selectedUser){
