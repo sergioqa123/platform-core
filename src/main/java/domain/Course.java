@@ -46,7 +46,6 @@ public class Course {
     }
 
     public void setInstructor(User instructor) {
-        this.status = true;
         this.instructor = instructor;
     }
 
