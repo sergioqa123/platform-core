@@ -57,7 +57,7 @@ public class Main {
                     assignInstructorToCourse();
                     break;
                 case 10:
-                    // enrollStudent();
+                    enrollStudent();
                     break;
                 default:
                     System.out.println("Invalid option...\n");
@@ -252,6 +252,8 @@ public class Main {
         courseService.deleteCourse(selectedCourse);
     }
 
+    // OTHERS
+
     public static void assignInstructorToCourse(){
         printAvailableCourses();
         Course selectedCourse = selectAvailableCourseById();
@@ -280,5 +282,9 @@ public class Main {
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
         System.out.println("Instructor assigned successfully!");
+    }
+
+    public static void enrollStudent(){
+        printAvailableCourses();
     }
 }

@@ -8,7 +8,7 @@ public class Course {
     private String description;
     private User instructor; // Only one instructor per course
     private List<User> students;
-    private boolean status;
+    private boolean status; // Have instructor
 
     public Course(String name, String description) {
         this.name = name;
