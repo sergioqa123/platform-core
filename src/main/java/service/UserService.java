@@ -23,7 +23,7 @@ public class UserService {
         if (roleInput.equals("2")){
             role = Role.INSTRUCTOR;
         }
-        User user = new User(name, email, role, false); // Instructors not assigned, Students not enrolled
+        User user = new User(name, email, role, false);
         userRepository.saveUser(user);
     }
 
