@@ -57,8 +57,8 @@ public class CourseService {
     }
 
     public void assignInstructorToCourse(Course course, User instructor){
+        instructor.setStatus(true); // course is now available
         course.setInstructor(instructor);
-        course.setStatus(true); // course is now available
     }
 
     public void enrollStudentToCourse(Course course, User student){
