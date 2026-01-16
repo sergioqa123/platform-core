@@ -4,21 +4,18 @@ public class User {
     private int id;
     private String name;
     private String email;
-    private boolean status = true;
+    private boolean status;
     private Role role;
 
-    public User(String name, String email, Role role) {
+    public User(String name, String email, Role role, boolean status) {
         this.name = name;
         this.email = email;
         this.role = role;
+        this.status = status;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setName(String name) {
@@ -27,6 +24,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public boolean isActive() {

@@ -3,10 +3,11 @@ package repository;
 import domain.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
 
-    private ArrayList<User> userList = new ArrayList<>();
+    private final List<User> userList = new ArrayList<>();
     private int userId = 1;
 
     public void saveUser(User user){
@@ -19,7 +20,7 @@ public class UserRepository {
         userList.remove(user);
     }
 
-    public ArrayList<User> getUsers(){
+    public List<User> getUsers(){
         return userList;
     }
 }
