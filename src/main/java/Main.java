@@ -307,9 +307,9 @@ public class Main {
             System.out.println(u);
         }
 
-        User selectedUser = selectUserById();
+        User selectedUser = null;
 
-        while (selectedUser == null){
+        while (selectedUser == null || selectedUser.getRole() != Role.STUDENT){
             selectedUser = selectUserById();
             if (selectedUser == null){
                 System.out.println("Enter a valid student ID.");
