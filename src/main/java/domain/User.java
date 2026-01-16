@@ -5,7 +5,7 @@ public class User {
     private String name;
     private String email;
     private boolean status;
-    private Role role;
+    private final Role role;
 
     public User(String name, String email, Role role, boolean status) {
         this.name = name;
