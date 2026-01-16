@@ -4,36 +4,24 @@ import domain.User;
 import service.CourseService;
 import service.UserService;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
-    private static Scanner scanner = new Scanner(System.in);
-    private static UserService userService = new UserService();
-    private static CourseService courseService = new CourseService();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final UserService userService = new UserService();
+    private static final CourseService courseService = new CourseService();
 
     public static void main(String[] args) {
         int option = 0;
         do {
-            System.out.println("=========== Welcome! ==========");
-            System.out.println("[1] Register user");
-            System.out.println("[2] List users");
-            System.out.println("[3] Update user");
-            System.out.println("[4] Delete user");
-            System.out.println("[5] Register course");
-            System.out.println("[6] List courses");
-            System.out.println("[7] Update course");
-            System.out.println("[8] Delete course");
-            System.out.println("[9] Assign course instructor");
-            System.out.println("[0] Exit");
-            System.out.println("===============================");
+            showMenu();
             System.out.print("Choose an option: ");
             try {
                 option = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e){
                 System.out.print("\nEnter a valid option.");
-                option = -1; // Change option value to prevent finishing the loop
+                option = -1;
             }
             System.out.println(" ");
             switch (option){
@@ -55,18 +43,21 @@ public class Main {
                 case 5:
                     registerCourse();
                     break;
-                case 6:{
+                case 6:
                     printCourses();
-                    break;}
-                case 7:{
+                    break;
+                case 7:
                     updateCourse();
-                    break;}
-                case 8:{
+                    break;
+                case 8:
                     deleteCourse();
-                    break;}
+                    break;
                 case 9:
                     // to do: return to menu if course list is empty (same for instructors)
                     assignInstructorToCourse();
+                    break;
+                case 10:
+                    enrollStudent();
                     break;
                 default:
                     System.out.println("Invalid option...\n");
@@ -77,13 +68,29 @@ public class Main {
         scanner.close();
     }
 
+    public static void showMenu(){
+        System.out.println("\n=========== Welcome! ==========");
+        System.out.println("[1] Register user");
+        System.out.println("[2] List users");
+        System.out.println("[3] Update user");
+        System.out.println("[4] Delete user");
+        System.out.println("[5] Register course");
+        System.out.println("[6] List courses");
+        System.out.println("[7] Update course");
+        System.out.println("[8] Delete course");
+        System.out.println("[9] Assign instructor");
+        System.out.println("[10] Enroll student");
+        System.out.println("[0] Exit");
+        System.out.println("===============================");
+    }
+
     // -- USER OPTIONS --
 
     public static void registerUser(){
         System.out.println("What type of user you want to register?");
-        System.out.println("1. Student");
-        System.out.println("2. Instructor");
-        System.out.print("Choose an option: ");
+        System.out.println("[1] Student");
+        System.out.println("[2] Instructor");
+        System.out.print("\nChoose an option: ");
         String roleInput = scanner.nextLine();
         while (!userService.isValidRole(roleInput)){
             System.out.print("Enter a valid type of user: ");
@@ -95,7 +102,6 @@ public class Main {
         String email = scanner.nextLine();
         userService.registerUser(name, email, roleInput);
         System.out.println("User registered successfully!");
-        System.out.println(" ");
     }
 
     public static User selectUserById(){
@@ -140,9 +146,14 @@ public class Main {
     public static void deleteUser(){
         printUsers();
         User selectedUser = selectUserById();
-        System.out.println("User '" + selectedUser.getName() + "' deleted successfully");
-        System.out.println(" ");
-        userService.deleteUser(selectedUser);
+        System.out.println("Are you sure you want to delete " + selectedUser.getName() + "? (y/n)");
+        String confirm = scanner.nextLine();
+        if (confirm.equalsIgnoreCase("y")){
+            userService.deleteUser(selectedUser);
+            System.out.println("\nUser '" + selectedUser.getName() + "' deleted successfully!");
+        } else {
+            System.out.println("Delete cancelled.");
+        }
     }
 
     // -- COURSE OPTIONS --
@@ -241,9 +252,11 @@ public class Main {
         courseService.deleteCourse(selectedCourse);
     }
 
+    // OTHERS
+
     public static void assignInstructorToCourse(){
         printAvailableCourses();
-        Course selectedCourse = selectCourseById();
+        Course selectedCourse = selectAvailableCourseById();
 
         System.out.println("------------- Available instructors -------------");
         for (User u : userService.getAllUsersByRole(Role.INSTRUCTOR)) {
@@ -269,5 +282,9 @@ public class Main {
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
         System.out.println("Instructor assigned successfully!");
+    }
+
+    public static void enrollStudent(){
+        printAvailableCourses();
     }
 }

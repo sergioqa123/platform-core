@@ -5,6 +5,7 @@ import domain.Role;
 import repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserService {
 
@@ -22,7 +23,7 @@ public class UserService {
         if (roleInput.equals("2")){
             role = Role.INSTRUCTOR;
         }
-        User user = new User(name, email, role);
+        User user = new User(name, email, role, false); // Instructors not assigned, Students not enrolled
         userRepository.saveUser(user);
     }
 
@@ -30,12 +31,22 @@ public class UserService {
         return roleInput.equals("1") || roleInput.equals("2");
     }
 
-    public ArrayList<User> getAllUsers(){
+    public List<User> getAllUsers(){
         return userRepository.getUsers();
     }
 
-    public ArrayList<User> getAllUsersByRole(Role role){
-        ArrayList<User> usersWithRole = new ArrayList<>();
+    public List<User> getAllUsersByStatus(boolean status){
+        List<User> usersByStatus = new ArrayList<>();
+        for (User u : getAllUsers()){
+            if (u.isActive() == status){
+                usersByStatus.add(u);
+            }
+        }
+        return usersByStatus;
+    }
+
+    public List<User> getAllUsersByRole(Role role){
+        List<User> usersWithRole = new ArrayList<>();
         for (User u : getAllUsers()) {
             if (u.getRole() == role) {
                 usersWithRole.add(u);
@@ -54,17 +65,11 @@ public class UserService {
     }
 
     public User getUserById(int userId){
-        for (User u : getAllUsers()){
-            if(u.getId() == userId){
-                return u;
-            }
-        }
-        return null;
+        return userRepository.getUserById(userId);
     }
 
-    public void updateUser(User selectedUser, String newName, String newMail){
-        selectedUser.setName(newName);
-        selectedUser.setEmail(newMail);
+    public void updateUser(User selectedUser, String newName, String newEmail){
+        userRepository.updateUser(selectedUser, newName, newEmail);
     }
 
     public void deleteUser(User selectedUser){

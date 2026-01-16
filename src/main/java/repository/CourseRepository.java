@@ -16,11 +16,25 @@ public class CourseRepository {
         courseList.add(course);
     }
 
+    public List<Course> getCourses(){
+        return courseList;
+    }
+
+    public void updateCourse(Course selectedCourse, String newName, String newDescription){
+        selectedCourse.setName(newName);
+        selectedCourse.setDescription(newDescription);
+    }
+
     public void removeCourse(Course course){
         courseList.remove(course);
     }
 
-    public List<Course> getCourses(){
-        return courseList;
+    public Course getCourseById(int id){
+        for (Course c : courseList){
+            if (c.getId() == id){
+                return c;
+            }
+        }
+        return null;
     }
 }
