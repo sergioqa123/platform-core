@@ -8,9 +8,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static Scanner scanner = new Scanner(System.in);
-    private static UserService userService = new UserService();
-    private static CourseService courseService = new CourseService();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final UserService userService = new UserService();
+    private static final CourseService courseService = new CourseService();
 
     public static void main(String[] args) {
         int option = 0;

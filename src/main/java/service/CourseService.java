@@ -44,12 +44,7 @@ public class CourseService {
     }
 
     public Course getCourseById(int courseId){
-        for (Course c : getAllCourses()){
-            if (c.getId() == courseId){
-                return c;
-            }
-        }
-        return null;
+        return courseRepository.getCourseById(courseId);
     }
 
     public Course getAvailableCourseById(int courseId){
@@ -67,8 +62,7 @@ public class CourseService {
     }
 
     public void updateCourse(Course selectedCourse, String newName, String newDescription){
-        selectedCourse.setName(newName);
-        selectedCourse.setDescription(newDescription);
+        courseRepository.updateCourse(selectedCourse, newName, newDescription);
     }
 
     public void deleteCourse(Course selectedCourse){
