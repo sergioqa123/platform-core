@@ -4,6 +4,7 @@ import domain.User;
 import service.CourseService;
 import service.UserService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -226,7 +227,7 @@ public class Main {
         System.out.println("------------- Available courses -------------");
         for (Course c : courseService.getAvailableCourses()) {
             if (!c.isActive()) {
-                System.out.println("ID: " + c.getId() + ", Name: " + c.getName());
+                System.out.println(c);
             }
             System.out.println("---------------------------------------------");
         }
@@ -247,9 +248,14 @@ public class Main {
     public static void deleteCourse(){
         printCourses();
         Course selectedCourse = selectCourseById();
-        System.out.println("Course '" + selectedCourse.getName() + "' deleted successfully");
-        System.out.println(" ");
-        courseService.deleteCourse(selectedCourse);
+        System.out.println("Are you sure you want to delete " + selectedCourse.getName() + "? (y/n)");
+        String confirm = scanner.nextLine();
+        if (confirm.equalsIgnoreCase("y")){
+            courseService.deleteCourse(selectedCourse);
+            System.out.println("\nCourse '" + selectedCourse.getName() + "' deleted successfully!");
+        } else {
+            System.out.println("Delete cancelled.");
+        }
     }
 
     // OTHERS
@@ -286,5 +292,34 @@ public class Main {
 
     public static void enrollStudent(){
         printAvailableCourses();
+        Course selectedCourse = selectAvailableCourseById();
+        if (selectedCourse == null){
+            System.out.println("Invalid option");
+            return;
+        }
+
+        List<User> students = userService.getAllUsersByRole(Role.STUDENT);
+        if (students.isEmpty()){
+            System.out.println("There are no students!");
+            return;
+        }
+        for (User u : students){
+            System.out.println(u);
+        }
+
+        User selectedUser = selectUserById();
+
+        while (selectedUser == null){
+            selectedUser = selectUserById();
+            if (selectedUser == null){
+                System.out.println("Enter a valid student ID.");
+                continue;
+            }
+            if (selectedUser.getRole() != Role.STUDENT){
+                System.out.println("Selected user is not a student!");
+            }
+        }
+
+        courseService.enrollStudentToCourse(selectedCourse, selectedUser);
     }
 }

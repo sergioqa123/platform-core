@@ -61,6 +61,10 @@ public class CourseService {
         course.setStatus(true); // course is now available
     }
 
+    public void enrollStudentToCourse(Course course, User student){
+        course.addStudent(student);
+    }
+
     public void updateCourse(Course selectedCourse, String newName, String newDescription){
         courseRepository.updateCourse(selectedCourse, newName, newDescription);
     }
