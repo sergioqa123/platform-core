@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
@@ -13,6 +14,7 @@ public class Course {
     public Course(String name, String description) {
         this.name = name;
         this.description = description;
+        this.students = new ArrayList<>();
     }
 
     public int getId() {

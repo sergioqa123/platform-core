@@ -317,9 +317,11 @@ public class Main {
             }
             if (selectedUser.getRole() != Role.STUDENT){
                 System.out.println("Selected user is not a student!");
+                selectedUser = null;
             }
         }
 
         courseService.enrollStudentToCourse(selectedCourse, selectedUser);
+        System.out.println("Student enrolled successfully!");
     }
 }
