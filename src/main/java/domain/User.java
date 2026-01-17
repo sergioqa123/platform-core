@@ -4,7 +4,7 @@ public class User {
     private int id;
     private String name;
     private String email;
-    private boolean status;
+    private boolean status; // Instructors assignment, students enrollment
     private final Role role;
 
     public User(String name, String email, Role role, boolean status) {

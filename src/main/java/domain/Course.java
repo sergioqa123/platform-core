@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
@@ -8,11 +9,12 @@ public class Course {
     private String description;
     private User instructor; // Only one instructor per course
     private List<User> students;
-    private boolean status; // Have instructor
+    private boolean status; // Has instructor
 
     public Course(String name, String description) {
         this.name = name;
         this.description = description;
+        this.students = new ArrayList<>();
     }
 
     public int getId() {
@@ -45,6 +47,14 @@ public class Course {
 
     public void setInstructor(User instructor) {
         this.instructor = instructor;
+    }
+
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void addStudent(User student) {
+        this.students.add(student);
     }
 
     @Override

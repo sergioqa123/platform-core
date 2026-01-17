@@ -57,8 +57,14 @@ public class CourseService {
     }
 
     public void assignInstructorToCourse(Course course, User instructor){
-        course.setInstructor(instructor);
         course.setStatus(true); // course is now available
+        instructor.setStatus(true); // instructor is now active
+        course.setInstructor(instructor);
+    }
+
+    public void enrollStudentToCourse(Course course, User student){
+        course.addStudent(student);
+        student.setStatus(true);
     }
 
     public void updateCourse(Course selectedCourse, String newName, String newDescription){
