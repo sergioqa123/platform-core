@@ -106,7 +106,6 @@ public class Main {
             name = scanner.nextLine();
         }
 
-        // TO-DO: valid email direction
         String email = "";
         while (email.isBlank()){
             System.out.print("Enter an email: ");
@@ -413,23 +412,27 @@ public class Main {
             System.out.println(u);
         }
         System.out.println("-------------------------------------------------");
-        System.out.println(" ");
 
         User selectedStudent = null;
 
-        while (selectedStudent == null || selectedStudent.getRole() != Role.STUDENT){
+        while (true){
             selectedStudent = selectUserById();
             if (selectedStudent == null){
-                System.out.println("Enter a valid student ID.");
+                System.out.println("Enrollment cancelled.");
+                return;
+            }
+            if (selectedStudent.getRole() != Role.STUDENT) {
+                System.out.println("Selected user is not a student!");
                 continue;
             }
-            if (selectedStudent.getRole() != Role.STUDENT){
-                System.out.println("Selected user is not a student!");
-                selectedStudent = null;
+            if (selectedCourse.getStudents().contains(selectedStudent)) {
+                System.out.println("'" + selectedStudent.getName() + "' is already enrolled in '" + selectedCourse.getName() + "'.");
+                continue;
             }
+            break;
         }
-
         courseService.enrollStudentToCourse(selectedCourse, selectedStudent);
         System.out.println("Student enrolled successfully!");
+
     }
 }
