@@ -362,10 +362,9 @@ public class Main {
 
             if (selectedInstructor == null){
                 System.out.println("Select a valid instructor ID.");
-            }
-
-            if (selectedInstructor.isActive()){
+            } else if (selectedInstructor.isActive()){
                 System.out.println("Instructor already assigned.");
+                selectedInstructor = null;
             }
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
