@@ -60,6 +60,9 @@ public class Course {
     @Override
     public String toString() {
         return "ID: " + id +
-                ", Name: " + name;
+                ", Name: " + name +
+                ", Description: " + description +
+                ", Instructor: " + (instructor == null ? "Not assigned" : instructor.getName()) +
+                ", Status: " + (status ? "Active" : "Not active");
     }
 }

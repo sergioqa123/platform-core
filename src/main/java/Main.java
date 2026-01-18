@@ -22,7 +22,7 @@ public class Main {
             try {
                 option = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e){
-                System.out.print("\nEnter a valid option.");
+                System.out.print("\nEnter a number.");
                 option = -1;
             }
             System.out.println(" ");
@@ -61,11 +61,9 @@ public class Main {
                     enrollStudent();
                     break;
                 default:
-                    System.out.println("Invalid option...\n");
+                    System.out.println("Selected option doesn't exists...\n");
             }
-
         } while (option != 0);
-
         scanner.close();
     }
 
@@ -91,16 +89,30 @@ public class Main {
         System.out.println("What type of user you want to register?");
         System.out.println("[1] Student");
         System.out.println("[2] Instructor");
-        System.out.print("\nChoose an option: ");
+        System.out.print("\nChoose an option (0 to cancel): ");
+
         String roleInput = scanner.nextLine();
+        if (roleInput.equals("0")){
+            return;
+        }
         while (!userService.isValidRole(roleInput)){
-            System.out.print("Enter a valid type of user: ");
+            System.out.print("Enter a valid type of user (1 or 2): ");
             roleInput = scanner.nextLine();
         }
-        System.out.print("Enter a name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter an email: ");
-        String email = scanner.nextLine();
+
+        String name = "";
+        while (name.isBlank()){
+            System.out.print("Enter a name: ");
+            name = scanner.nextLine();
+        }
+
+        // TO-DO: valid email direction
+        String email = "";
+        while (email.isBlank()){
+            System.out.print("Enter an email: ");
+            email = scanner.nextLine();
+        }
+
         userService.registerUser(name, email, roleInput);
         System.out.println("User registered successfully!");
     }
@@ -137,7 +149,6 @@ public class Main {
             System.out.println("No users found.");
         }
         System.out.println("-------------------------------------------------");
-        System.out.println(" ");
     }
 
     public static void updateUser(){
@@ -173,18 +184,28 @@ public class Main {
     // -- COURSE OPTIONS --
 
     public static void registerCourse(){
-        System.out.print("Enter course name: ");
-        String courseName = scanner.nextLine();
-        while (!courseService.isUnique(courseName)){
-            System.out.println("Course already exists.");
-            System.out.print("Enter a new course name: ");
+        String courseName = null;
+        while (courseName == null){
+            System.out.print("Enter a course name: ");
             courseName = scanner.nextLine();
+
+            if (!courseService.isUnique(courseName)){
+                System.out.println("Course '" + courseName + "' already exists.");
+                courseName = null;
+            } else if (courseName.isBlank()){
+                courseName = null;
+            }
         }
-        System.out.print("Enter a description: ");
-        String description = scanner.nextLine();
+
+        String description = "";
+        while (description.isBlank()){
+            System.out.print("Enter a description: ");
+            description = scanner.nextLine();
+        }
+
         Course course = new Course(courseName, description);
         courseService.registerCourse(course);
-        System.out.println(" ");
+        System.out.println("Course registered successfully!");
     }
 
     public static Course selectCourseById(){
