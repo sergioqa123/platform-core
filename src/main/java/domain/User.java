@@ -51,6 +51,7 @@ public class User {
         return "ID: " + id +
                 ", Name: " + name +
                 ", Email: " + email +
-                ", Role: " + role;
+                ", Role: " + role +
+                ", Status: " + (status ? "Active" : "Inactive");
     }
 }

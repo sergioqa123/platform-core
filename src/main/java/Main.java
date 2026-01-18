@@ -302,7 +302,7 @@ public class Main {
         }
 
         System.out.println("------------- Available instructors -------------");
-        List<User> availableInstructors = userService.getAllUsersByRole(Role.INSTRUCTOR);
+        List<User> availableInstructors = userService.getAvailableInstructors();
         for (User u : availableInstructors) {
             System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
         }
@@ -325,7 +325,12 @@ public class Main {
             if (userId == 0){
                 return;
             }
+
             selectedInstructor = userService.getInstructorById(userId);
+
+            if (selectedInstructor.isActive()){
+                System.out.println("Instructor already assigned.");
+            }
 
             if (selectedInstructor == null){
                 System.out.println("Select a valid instructor ID.");

@@ -35,14 +35,24 @@ public class UserService {
         return userRepository.getUsers();
     }
 
-    public List<User> getAllUsersByStatus(boolean status){
-        List<User> usersByStatus = new ArrayList<>();
-        for (User u : getAllUsers()){
-            if (u.isActive() == status){
-                usersByStatus.add(u);
+    public List<User> getAvailableInstructors(){
+        List<User> availableInstructors = new ArrayList<>();
+        for (User u : getAllUsersByRole(Role.INSTRUCTOR)){
+            if (!u.isActive()){
+                availableInstructors.add(u);
             }
         }
-        return usersByStatus;
+        return availableInstructors;
+    }
+
+    public List<User> getEnrolledStudents(){
+        List<User> enrolledStudents = new ArrayList<>();
+        for (User u : getAllUsersByRole(Role.STUDENT)){
+            if (!u.isActive()){
+                enrolledStudents.add(u);
+            }
+        }
+        return enrolledStudents;
     }
 
     public List<User> getAllUsersByRole(Role role){
