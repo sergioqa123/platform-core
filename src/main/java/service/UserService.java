@@ -48,7 +48,7 @@ public class UserService {
     public List<User> getEnrolledStudents(){
         List<User> enrolledStudents = new ArrayList<>();
         for (User u : getAllUsersByRole(Role.STUDENT)){
-            if (!u.isActive()){
+            if (u.isActive()){
                 enrolledStudents.add(u);
             }
         }

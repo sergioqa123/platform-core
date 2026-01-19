@@ -33,7 +33,7 @@ public class CourseService {
     }
 
     // "Available" = no active
-    public List<Course> getAvailableCourses (){
+    public List<Course> getAvailableCourses(){
         List<Course> availableCourses = new ArrayList<>();
         for (Course c : this.getAllCourses()) {
             if (!c.isActive()) {
@@ -41,6 +41,25 @@ public class CourseService {
             }
         }
         return availableCourses;
+    }
+
+    public List<Course> getActiveCourses(){
+        List<Course> activeCourses = new ArrayList<>();
+        for (Course c : this.getAllCourses()){
+            if (c.isActive()){
+                activeCourses.add(c);
+            }
+        }
+        return activeCourses;
+    }
+
+    public Course getActiveCourseById(int courseId){
+        for (Course c : getActiveCourses()){
+            if (c.getId() == courseId){
+                return c;
+            }
+        }
+        return null;
     }
 
     public Course getCourseById(int courseId){

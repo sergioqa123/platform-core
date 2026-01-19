@@ -22,7 +22,7 @@ public class Main {
             try {
                 option = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e){
-                System.out.print("\nEnter a valid option.");
+                System.out.print("\nEnter a number.");
                 option = -1;
             }
             System.out.println(" ");
@@ -61,11 +61,9 @@ public class Main {
                     enrollStudent();
                     break;
                 default:
-                    System.out.println("Invalid option...\n");
+                    System.out.println("Selected option doesn't exists...\n");
             }
-
         } while (option != 0);
-
         scanner.close();
     }
 
@@ -91,16 +89,29 @@ public class Main {
         System.out.println("What type of user you want to register?");
         System.out.println("[1] Student");
         System.out.println("[2] Instructor");
-        System.out.print("\nChoose an option: ");
+        System.out.print("\nChoose an option (0 to cancel): ");
+
         String roleInput = scanner.nextLine();
+        if (roleInput.equals("0")){
+            return;
+        }
         while (!userService.isValidRole(roleInput)){
-            System.out.print("Enter a valid type of user: ");
+            System.out.print("Enter a valid type of user (1 or 2): ");
             roleInput = scanner.nextLine();
         }
-        System.out.print("Enter a name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter an email: ");
-        String email = scanner.nextLine();
+
+        String name = "";
+        while (name.isBlank()){
+            System.out.print("Enter a name: ");
+            name = scanner.nextLine();
+        }
+
+        String email = "";
+        while (email.isBlank()){
+            System.out.print("Enter an email: ");
+            email = scanner.nextLine();
+        }
+
         userService.registerUser(name, email, roleInput);
         System.out.println("User registered successfully!");
     }
@@ -137,7 +148,6 @@ public class Main {
             System.out.println("No users found.");
         }
         System.out.println("-------------------------------------------------");
-        System.out.println(" ");
     }
 
     public static void updateUser(){
@@ -160,6 +170,10 @@ public class Main {
         if (selectedUser == null) {
             return;
         }
+        if (selectedUser.isActive()) {
+            System.out.println("Failed: user is currently assigned/enrolled in a course");
+            return;
+        }
         System.out.println("Are you sure you want to delete " + selectedUser.getName() + "? (y/n)");
         String confirm = scanner.nextLine();
         if (confirm.equalsIgnoreCase("y")){
@@ -173,18 +187,28 @@ public class Main {
     // -- COURSE OPTIONS --
 
     public static void registerCourse(){
-        System.out.print("Enter course name: ");
-        String courseName = scanner.nextLine();
-        while (!courseService.isUnique(courseName)){
-            System.out.println("Course already exists.");
-            System.out.print("Enter a new course name: ");
+        String courseName = null;
+        while (courseName == null){
+            System.out.print("Enter a course name: ");
             courseName = scanner.nextLine();
+
+            if (!courseService.isUnique(courseName)){
+                System.out.println("Course '" + courseName + "' already exists.");
+                courseName = null;
+            } else if (courseName.isBlank()){
+                courseName = null;
+            }
         }
-        System.out.print("Enter a description: ");
-        String description = scanner.nextLine();
+
+        String description = "";
+        while (description.isBlank()){
+            System.out.print("Enter a description: ");
+            description = scanner.nextLine();
+        }
+
         Course course = new Course(courseName, description);
         courseService.registerCourse(course);
-        System.out.println(" ");
+        System.out.println("Course registered successfully!");
     }
 
     public static Course selectCourseById(){
@@ -233,6 +257,29 @@ public class Main {
         return selectedCourse;
     }
 
+    public static Course selectActiveCourseById(){
+        Course selectedCourse = null;
+        int courseId = 0;
+
+        while (selectedCourse == null){
+            System.out.print("Select a course ID (0 to cancel): ");
+            try {
+                courseId = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a number.");
+                continue;
+            }
+            if (courseId == 0){
+                return null;
+            }
+            selectedCourse = courseService.getActiveCourseById(courseId);
+            if (selectedCourse == null){
+                System.out.println("Course not found.");
+            }
+        }
+        return selectedCourse;
+    }
+
     public static void printCourses(){
         System.out.println("------------- Course list -------------");
         List<Course> courseList = courseService.getAllCourses();
@@ -246,19 +293,28 @@ public class Main {
         System.out.println(" ");
     }
 
-    public static void printAvailableCourses() {
+    public static void printAvailableCourses(){
         System.out.println("------------- Available courses -------------");
         List<Course> availableCourses = courseService.getAvailableCourses();
         for (Course c : availableCourses) {
-            if (!c.isActive()) {
-                System.out.println(c);
-            }
+            System.out.println(c);
         }
         if (availableCourses.isEmpty()){
             System.out.println("No available courses found.");
         }
         System.out.println("---------------------------------------------");
+    }
 
+    public static void printActiveCourses(){
+        System.out.println("------------- Active courses -------------");
+        List<Course> activeCourses = courseService.getActiveCourses();
+        for (Course c : activeCourses){
+            System.out.println(c);
+        }
+        if (activeCourses.isEmpty()){
+            System.out.println("No active courses found.");
+        }
+        System.out.println("---------------------------------------------");
     }
 
     public static void updateCourse(){
@@ -328,12 +384,11 @@ public class Main {
 
             selectedInstructor = userService.getInstructorById(userId);
 
-            if (selectedInstructor.isActive()){
-                System.out.println("Instructor already assigned.");
-            }
-
             if (selectedInstructor == null){
                 System.out.println("Select a valid instructor ID.");
+            } else if (selectedInstructor.isActive()){
+                System.out.println("Instructor already assigned.");
+                selectedInstructor = null;
             }
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
@@ -341,20 +396,18 @@ public class Main {
     }
 
     public static void enrollStudent(){
-        printAvailableCourses();
+        printActiveCourses();
         Course selectedCourse = null;
         while (selectedCourse == null){
-            selectedCourse = selectAvailableCourseById();
+            selectedCourse = selectActiveCourseById();
             if (selectedCourse == null){
                 System.out.println("Enrollment failed.");
                 return;
             }
         }
-
         List<User> students = userService.getAllUsersByRole(Role.STUDENT);
         if (students.isEmpty()){
             System.out.println("There are no students!");
-            System.out.println("Enrollment failed");
             return;
         }
 
@@ -363,23 +416,27 @@ public class Main {
             System.out.println(u);
         }
         System.out.println("-------------------------------------------------");
-        System.out.println(" ");
 
-        User selectedUser = null;
+        User selectedStudent = null;
 
-        while (selectedUser == null || selectedUser.getRole() != Role.STUDENT){
-            selectedUser = selectUserById();
-            if (selectedUser == null){
-                System.out.println("Enter a valid student ID.");
+        while (true){
+            selectedStudent = selectUserById();
+            if (selectedStudent == null){
+                System.out.println("Enrollment cancelled.");
+                return;
+            }
+            if (selectedStudent.getRole() != Role.STUDENT) {
+                System.out.println("Selected user is not a student!");
                 continue;
             }
-            if (selectedUser.getRole() != Role.STUDENT){
-                System.out.println("Selected user is not a student!");
-                selectedUser = null;
+            if (selectedCourse.getStudents().contains(selectedStudent)) {
+                System.out.println("'" + selectedStudent.getName() + "' is already enrolled in '" + selectedCourse.getName() + "'.");
+                continue;
             }
+            break;
         }
-
-        courseService.enrollStudentToCourse(selectedCourse, selectedUser);
+        courseService.enrollStudentToCourse(selectedCourse, selectedStudent);
         System.out.println("Student enrolled successfully!");
+
     }
 }

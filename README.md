@@ -1,19 +1,19 @@
 # Platform Core
 
-User and course management system built with Java.
+Console application for managing users and courses. Built with pure Java following a layered architecture.
 
 ## Description
 
-Console application for managing users (students and instructors) and courses. Includes basic CRUD operations and instructor assignment to courses.
+System that allows managing students and instructors, creating courses, assigning instructors to courses, and enrolling students. Implements CRUD operations for users and courses through a console menu.
 
 ## Features
 
-- User registration, listing, update and deletion
-- Course registration, listing, update and deletion
+- User registration and management (students and instructors)
+- Course registration and management
 - Instructor assignment to courses
 - Student enrollment in courses
 
-## Project Structure
+## Structure
 
 ```
 src/main/java/
@@ -28,15 +28,6 @@ src/main/java/
     service/
         UserService.java
         CourseService.java
-```
-
-## How to Run
-
-Compile and run the `Main.java` class.
-
-```
-javac Main.java
-java Main
 ```
 
 ## Technologies
