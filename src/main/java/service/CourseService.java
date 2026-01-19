@@ -28,8 +28,19 @@ public class CourseService {
         return true;
     }
 
+
     public List<Course> getAllCourses(){
         return courseRepository.getCourses();
+    }
+
+
+    public boolean isInstructorAssigned(User instructor){
+        for (Course c : getAllCourses()){
+            if (c.getInstructor() == instructor){
+                return true;
+            }
+        }
+        return false;
     }
 
     // "Available" = no active
@@ -77,13 +88,12 @@ public class CourseService {
 
     public void assignInstructorToCourse(Course course, User instructor){
         course.setStatus(true); // course is now active
-        instructor.setStatus(true); // instructor is now active
         course.setInstructor(instructor);
     }
 
     public void enrollStudentToCourse(Course course, User student){
         course.addStudent(student);
-        student.setStatus(true);
+        student.setEnrolled(true);
     }
 
     public void updateCourse(Course selectedCourse, String newName, String newDescription){
