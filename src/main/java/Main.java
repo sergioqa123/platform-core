@@ -170,6 +170,10 @@ public class Main {
         if (selectedUser == null) {
             return;
         }
+        if (selectedUser.isActive()) {
+            System.out.println("Failed: user is currently assigned/enrolled in a course");
+            return;
+        }
         System.out.println("Are you sure you want to delete " + selectedUser.getName() + "? (y/n)");
         String confirm = scanner.nextLine();
         if (confirm.equalsIgnoreCase("y")){
