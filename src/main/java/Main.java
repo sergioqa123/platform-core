@@ -178,13 +178,12 @@ public class Main {
                 System.out.println("Unassign the instructor from all courses first.");
                 return;
             }
-        }
-
-        if (selectedUser.isEnrolled()) {
+        } else if (selectedUser.isEnrolled()) {
             System.out.println("Failed: student is currently enrolled in a course.");
             System.out.println("Unenroll the student from all courses first.");
             return;
         }
+
         System.out.println("Are you sure you want to delete " + selectedUser.getName() + "? (y/n)");
         String confirm = scanner.nextLine();
         if (confirm.equalsIgnoreCase("y")){

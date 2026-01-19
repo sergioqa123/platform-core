@@ -36,7 +36,7 @@ public class CourseService {
 
     public boolean isInstructorAssigned(User instructor){
         for (Course c : getAllCourses()){
-            if (c.getInstructor() == instructor){
+            if (c.getInstructor() != null && c.getInstructor().getId() == instructor.getId()){
                 return true;
             }
         }

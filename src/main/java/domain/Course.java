@@ -7,7 +7,7 @@ public class Course {
     private int id;
     private String name;
     private String description;
-    private User instructor; // Only one instructor per course
+    private User instructor;
     private final List<User> students;
     private boolean status; // Has instructor
 
