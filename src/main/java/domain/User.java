@@ -4,14 +4,14 @@ public class User {
     private int id;
     private String name;
     private String email;
-    private boolean status; // Instructors assignment, students enrollment
+    private boolean enrolled;
     private final Role role;
 
-    public User(String name, String email, Role role, boolean status) {
+    public User(String name, String email, Role role) {
         this.name = name;
         this.email = email;
         this.role = role;
-        this.status = status;
+        this.enrolled = false;
     }
 
     public String getName() {
@@ -26,12 +26,12 @@ public class User {
         this.email = email;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setEnrolled(boolean enrolled) {
+        this.enrolled = enrolled;
     }
 
-    public boolean isActive() {
-        return status;
+    public boolean isEnrolled() {
+        return enrolled;
     }
 
     public Role getRole() {
@@ -48,10 +48,11 @@ public class User {
 
     @Override
     public String toString() {
+        String status = (role == Role.STUDENT ? (enrolled ? "Enrolled" : "Not enrolled") : "Instructor");
         return "ID: " + id +
                 ", Name: " + name +
                 ", Email: " + email +
                 ", Role: " + role +
-                ", Status: " + (status ? "Active" : "Inactive");
+                ", Status: " + status;
     }
 }

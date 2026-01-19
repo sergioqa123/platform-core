@@ -167,11 +167,22 @@ public class Main {
     public static void deleteUser(){
         printUsers();
         User selectedUser = selectUserById();
+
         if (selectedUser == null) {
             return;
         }
-        if (selectedUser.isActive()) {
-            System.out.println("Failed: user is currently assigned/enrolled in a course");
+
+        if(selectedUser.getRole() == Role.INSTRUCTOR){
+            if (courseService.isInstructorAssigned(selectedUser)){
+                System.out.println("Failed: instructor is currently assigned in a course.");
+                System.out.println("Unassign the instructor from all courses first.");
+                return;
+            }
+        }
+
+        if (selectedUser.isEnrolled()) {
+            System.out.println("Failed: student is currently enrolled in a course.");
+            System.out.println("Unenroll the student from all courses first.");
             return;
         }
         System.out.println("Are you sure you want to delete " + selectedUser.getName() + "? (y/n)");
@@ -358,9 +369,9 @@ public class Main {
         }
 
         System.out.println("------------- Available instructors -------------");
-        List<User> availableInstructors = userService.getAvailableInstructors();
+        List<User> availableInstructors = userService.getAllInstructors();
         for (User u : availableInstructors) {
-            System.out.println("ID: " + u.getId() + ", Name: " + u.getName());
+            System.out.println(u);
         }
         if (availableInstructors.isEmpty()){
             System.out.println("No available instructors found.");
@@ -384,11 +395,8 @@ public class Main {
 
             selectedInstructor = userService.getInstructorById(userId);
 
-            if (selectedInstructor == null){
+            if (selectedInstructor == null) {
                 System.out.println("Select a valid instructor ID.");
-            } else if (selectedInstructor.isActive()){
-                System.out.println("Instructor already assigned.");
-                selectedInstructor = null;
             }
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
@@ -437,6 +445,5 @@ public class Main {
         }
         courseService.enrollStudentToCourse(selectedCourse, selectedStudent);
         System.out.println("Student enrolled successfully!");
-
     }
 }

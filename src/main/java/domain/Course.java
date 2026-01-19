@@ -8,7 +8,7 @@ public class Course {
     private String name;
     private String description;
     private User instructor; // Only one instructor per course
-    private List<User> students;
+    private final List<User> students;
     private boolean status; // Has instructor
 
     public Course(String name, String description) {
@@ -49,6 +49,10 @@ public class Course {
         this.instructor = instructor;
     }
 
+    public User getInstructor() {
+        return instructor;
+    }
+
     public List<User> getStudents() {
         return students;
     }
@@ -63,6 +67,7 @@ public class Course {
                 ", Name: " + name +
                 ", Description: " + description +
                 ", Instructor: " + (instructor == null ? "Not assigned" : instructor.getName()) +
+                ", Students: " + getStudents().size() +
                 ", Status: " + (status ? "Active" : "Not active");
     }
 }

@@ -23,7 +23,7 @@ public class UserService {
         if (roleInput.equals("2")){
             role = Role.INSTRUCTOR;
         }
-        User user = new User(name, email, role, false);
+        User user = new User(name, email, role);
         userRepository.saveUser(user);
     }
 
@@ -35,20 +35,14 @@ public class UserService {
         return userRepository.getUsers();
     }
 
-    public List<User> getAvailableInstructors(){
-        List<User> availableInstructors = new ArrayList<>();
-        for (User u : getAllUsersByRole(Role.INSTRUCTOR)){
-            if (!u.isActive()){
-                availableInstructors.add(u);
-            }
-        }
-        return availableInstructors;
+    public List<User> getAllInstructors(){
+        return getAllUsersByRole(Role.INSTRUCTOR);
     }
 
     public List<User> getEnrolledStudents(){
         List<User> enrolledStudents = new ArrayList<>();
         for (User u : getAllUsersByRole(Role.STUDENT)){
-            if (u.isActive()){
+            if (u.isEnrolled()){
                 enrolledStudents.add(u);
             }
         }
