@@ -4,7 +4,6 @@ import domain.User;
 import service.CourseService;
 import service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -110,6 +109,10 @@ public class Main {
         while (email.isBlank()){
             System.out.print("Enter an email: ");
             email = scanner.nextLine();
+            if (!email.contains("@")){
+                System.out.println("Enter a valid email address");
+                email = "";
+            }
         }
 
         userService.registerUser(name, email, roleInput);
@@ -156,10 +159,23 @@ public class Main {
         if (selectedUser == null) {
             return;
         }
-        System.out.print("Enter a new name: ");
-        String newName = scanner.nextLine();
-        System.out.print("Enter a new email: ");
-        String newEmail = scanner.nextLine();
+
+        String newName = "";
+        while (newName.isBlank()){
+            System.out.print("Enter a new name: ");
+            newName = scanner.nextLine();
+        }
+
+        String newEmail = "";
+        while (newEmail.isBlank()){
+            System.out.print("Enter a new email: ");
+            newEmail = scanner.nextLine();
+            if (!newEmail.contains("@")){
+                System.out.println("Enter a valid email address");
+                newEmail = "";
+            }
+        }
+
         userService.updateUser(selectedUser, newName, newEmail);
         System.out.println("User updated successfully");
     }
@@ -346,6 +362,15 @@ public class Main {
         printCourses();
         Course selectedCourse = selectCourseById();
         if (selectedCourse == null){
+            return;
+        }
+        if (selectedCourse.isActive()){
+            System.out.println("'" + selectedCourse.getName() + "' has an assigned instructor.");
+            System.out.println("Unassign instructor first.");
+            if (!selectedCourse.getStudents().isEmpty()){
+                System.out.println("There are " + selectedCourse.getStudents().size() + " enrolled students.");
+                System.out.println("Unenroll students first.");
+            }
             return;
         }
         System.out.println("Are you sure you want to delete " + selectedCourse.getName() + "? (y/n)");
