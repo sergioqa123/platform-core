@@ -4,6 +4,7 @@ import domain.User;
 import service.CourseService;
 import service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,6 +60,8 @@ public class Main {
                 case 10:
                     enrollStudent();
                     break;
+                case 11:
+                    showStudentsInCourse();
                 default:
                     System.out.println("Selected option doesn't exists...\n");
             }
@@ -78,6 +81,7 @@ public class Main {
         System.out.println("[8] Delete course");
         System.out.println("[9] Assign instructor");
         System.out.println("[10] Enroll student");
+        System.out.println("[11] Show students in course");
         System.out.println("[0] Exit");
         System.out.println("===============================");
     }
@@ -383,6 +387,27 @@ public class Main {
         }
     }
 
+    public static void showStudentsInCourse(){
+        printCourses();
+        Course selectedCourse = selectCourseById();
+        if (selectedCourse == null){
+            return;
+        }
+        List<User> studentsInCourse = selectedCourse.getStudents();
+
+        if (studentsInCourse == null || studentsInCourse.isEmpty()){
+            System.out.println("No students in this course");
+            return;
+        }
+
+        System.out.println("------------- Students in " + selectedCourse.getName() + " -------------");
+        for (User u : studentsInCourse){
+            System.out.println(u);
+        }
+        System.out.println("------------------------------------------");
+
+    }
+
     // OTHERS
 
     public static void assignInstructorToCourse(){
@@ -422,6 +447,12 @@ public class Main {
             if (selectedInstructor == null) {
                 System.out.println("Select a valid instructor ID.");
             }
+        }
+        if (courseService.isInstructorAssigned(selectedInstructor)){
+            System.out.println("'" + selectedInstructor.getName() + "' is already assigned to " + selectedCourse.getName());
+        }
+        if (selectedCourse.isActive()){
+            System.out.println("Unassign the instructor");
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
         System.out.println("Instructor assigned successfully!");
