@@ -60,6 +60,8 @@ public class Main {
                 case 10:
                     enrollStudent();
                     break;
+                case 11:
+                    showStudentsInCourse();
                 default:
                     System.out.println("Selected option doesn't exists...\n");
             }
@@ -79,6 +81,7 @@ public class Main {
         System.out.println("[8] Delete course");
         System.out.println("[9] Assign instructor");
         System.out.println("[10] Enroll student");
+        System.out.println("[11] Show students in course");
         System.out.println("[0] Exit");
         System.out.println("===============================");
     }
@@ -110,6 +113,10 @@ public class Main {
         while (email.isBlank()){
             System.out.print("Enter an email: ");
             email = scanner.nextLine();
+            if (!email.contains("@")){
+                System.out.println("Enter a valid email address");
+                email = "";
+            }
         }
 
         userService.registerUser(name, email, roleInput);
@@ -156,10 +163,23 @@ public class Main {
         if (selectedUser == null) {
             return;
         }
-        System.out.print("Enter a new name: ");
-        String newName = scanner.nextLine();
-        System.out.print("Enter a new email: ");
-        String newEmail = scanner.nextLine();
+
+        String newName = "";
+        while (newName.isBlank()){
+            System.out.print("Enter a new name: ");
+            newName = scanner.nextLine();
+        }
+
+        String newEmail = "";
+        while (newEmail.isBlank()){
+            System.out.print("Enter a new email: ");
+            newEmail = scanner.nextLine();
+            if (!newEmail.contains("@")){
+                System.out.println("Enter a valid email address");
+                newEmail = "";
+            }
+        }
+
         userService.updateUser(selectedUser, newName, newEmail);
         System.out.println("User updated successfully");
     }
@@ -348,6 +368,15 @@ public class Main {
         if (selectedCourse == null){
             return;
         }
+        if (selectedCourse.isActive()){
+            System.out.println("'" + selectedCourse.getName() + "' has an assigned instructor.");
+            System.out.println("Unassign instructor first.");
+            if (!selectedCourse.getStudents().isEmpty()){
+                System.out.println("There are " + selectedCourse.getStudents().size() + " enrolled students.");
+                System.out.println("Unenroll students first.");
+            }
+            return;
+        }
         System.out.println("Are you sure you want to delete " + selectedCourse.getName() + "? (y/n)");
         String confirm = scanner.nextLine();
         if (confirm.equalsIgnoreCase("y")){
@@ -356,6 +385,27 @@ public class Main {
         } else {
             System.out.println("Delete cancelled.");
         }
+    }
+
+    public static void showStudentsInCourse(){
+        printCourses();
+        Course selectedCourse = selectCourseById();
+        if (selectedCourse == null){
+            return;
+        }
+        List<User> studentsInCourse = selectedCourse.getStudents();
+
+        if (studentsInCourse == null || studentsInCourse.isEmpty()){
+            System.out.println("No students in this course");
+            return;
+        }
+
+        System.out.println("------------- Students in " + selectedCourse.getName() + " -------------");
+        for (User u : studentsInCourse){
+            System.out.println(u);
+        }
+        System.out.println("------------------------------------------");
+
     }
 
     // OTHERS
@@ -397,6 +447,12 @@ public class Main {
             if (selectedInstructor == null) {
                 System.out.println("Select a valid instructor ID.");
             }
+        }
+        if (courseService.isInstructorAssigned(selectedInstructor)){
+            System.out.println("'" + selectedInstructor.getName() + "' is already assigned to " + selectedCourse.getName());
+        }
+        if (selectedCourse.isActive()){
+            System.out.println("Unassign the instructor");
         }
         courseService.assignInstructorToCourse(selectedCourse, selectedInstructor);
         System.out.println("Instructor assigned successfully!");
