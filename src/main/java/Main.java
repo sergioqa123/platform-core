@@ -4,7 +4,6 @@ import domain.User;
 import service.CourseService;
 import service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -81,7 +80,7 @@ public class Main {
         System.out.println("[8] Delete course");
         System.out.println("[9] Assign instructor");
         System.out.println("[10] Enroll student");
-        System.out.println("[11] Show students in course");
+        // System.out.println("[11] Show students in course");
         System.out.println("[0] Exit");
         System.out.println("===============================");
     }
@@ -113,7 +112,7 @@ public class Main {
         while (email.isBlank()){
             System.out.print("Enter an email: ");
             email = scanner.nextLine();
-            if (!email.contains("@")){
+            if (!userService.isValidEmail(email)){
                 System.out.println("Enter a valid email address");
                 email = "";
             }
@@ -174,7 +173,7 @@ public class Main {
         while (newEmail.isBlank()){
             System.out.print("Enter a new email: ");
             newEmail = scanner.nextLine();
-            if (!newEmail.contains("@")){
+            if (!userService.isValidEmail(newEmail)){
                 System.out.println("Enter a valid email address");
                 newEmail = "";
             }
